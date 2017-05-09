@@ -25,7 +25,7 @@
             <button class="layui-btn layui-btn-small layui-btn-normal ajax-all" data-name="checkbox" data-params='{"url": "/php/test.php","data":"id=1&name=hao&checkbox=6,9,0&va=23"}'>
                 <i class="layui-icon">&#x1005;</i> 状态
             </button>
-            <button class="layui-btn layui-btn-small modal-iframe" data-params='{"content": "add", "title": "添加菜单","area":"100%,100%","shade":false,"maxmin":true}'>
+            <button class="layui-btn layui-btn-small modal-iframe" data-params='{"content": "add", "title": "【添加角色】","area":"60%,80%","shade":false,"maxmin":true}'>
                 <i class="iconfont">&#xe61c;</i> 添加角色
             </button>
         </div>
@@ -34,76 +34,58 @@
         <div class="text-right" id="page"></div>
     </section>
 </div>
+
+
 <script id="list-tpl" type="text/html" data-params='{"url":"lists","pageid":"#page"}'>
-    {{# function create_menu(data,level){ }}
-    {{# if(data){ }}
-    {{# layui.each(data, function(index, item){ }}
-    <tr>
-        <td><input type="checkbox" name="checkbox" value="{{ item.id}}" lay-skin="primary"></td>
-        <td>{{ item.id}}</td>
-        <td>
-            {{# for(var i=1;i<level;i++){ }}&nbsp;&nbsp;{{# } }}
-            {{# if(level > 0){ }}├{{# } }}
-            {{ item.name }}
-        </td>
-        <td>
-            {{ item.remark }}
-        </td>
-        <td>
-            <div class="layui-input-inline" style="width: 100px;">
-                <input type="text" class="layui-input ajax-blur" name="sort" value="{{ item.sort}}" data-params='{"url":"set_sort","data":"id={{ item.id }}&name=paco&sort=1"}'>
-            </div>
-        </td>
-        <td>
-            {{# if(item.ban == 1){ }}
-            <span>禁止编辑</span>
-            {{# }else{ }}
-            <input type="checkbox" name="state" lay-skin="switch" lay-text="正常|异常" {{#if (item.state){ }}checked="checked" {{# } }} lay-filter="ajax" data-params='{"url":"set_status","data":"id={{ item.id}}&name=paco&state=1"}'>
-            {{# } }}
-
-        </td>
-        <td>
-            {{# if(level != 1){ }}
-            <button class="layui-btn layui-btn-mini modal-iframe" data-params='{"content":"add?id={{ item.id}}","area":"100%,100%","title":"添加{{ item.title }}的子分类"}'>
-                <i class="iconfont">&#xe653;</i>权限编辑
-            </button>
-            {{# } }}
-            {{# if(item.ban != 1){ }}
-            <button class="layui-btn layui-btn-mini modal-iframe" data-params='{"content": "edit?id={{ item.id}}", "title": "编辑角色","area":"100%,100%","shade":false,"maxmin":true}'>
-                <i class="iconfont">&#xe653;</i>编辑
-            </button>
-            <button class="layui-btn layui-btn-mini layui-btn-danger ajax" data-params='{"url": "delete","data":"id={{ item.id }}"}'>
-                <i class="iconfont">&#xe626;</i>删除
-            </button>
-            {{# } }}
-        </td>
-    </tr>
-    {{# if(item.sub && item.sub.length > 0){ }}
-    {{# create_menu(item.sub,level+1); }}
-    {{# } }}
-    {{# }); }}
-    {{# } }}
-    {{# } }}
-
-
     <table id="example" class="layui-table lay-even">
         <thead>
         <tr>
             <th width="30"><input type="checkbox" id="checkall" data-name="checkbox" lay-filter="check" lay-skin="primary"></th>
             <th width="60">序号</th>
-            <th>名称</th>
-            <th>角色描述</th>
-            <th width="120">排序</th>
-            <th width="100">状态</th>
+            <th width="120">角色名称</th>
+            <th>描述</th>
+            <th width="80">排序</th>
+            <th width="80">状态</th>
             <th width="240">操作</th>
         </tr>
         </thead>
         <tbody>
-        {{# create_menu(d.list,0); }}
+        {{# layui.each(d.list, function(index, item){ }}
+        <tr>
+            <td><input type="checkbox" name="checkbox" value="{{ item.id}}" lay-skin="primary"></td>
+            <td>{{ item.id}}</td>
+            <td>{{ item.name}}</td>
+            <td>{{ item.remark}}</td>
+            <td>
+                <div class="layui-input-inline" style="width: 100px;">
+                    <input type="text" class="layui-input ajax-blur" name="sort" value="{{ item.sort}}" data-params='{"url":"set_sort","data":"id={{ item.id }}&name=paco&sort=1"}'>
+                </div>
+            </td>
+            <td>
+                {{# if(item.ban == 1){ }}
+                <span>禁止编辑</span>
+                {{# }else{ }}
+                <input type="checkbox" name="state" lay-skin="switch" lay-text="正常|异常" {{#if (item.state){ }}checked="checked" {{# } }} lay-filter="ajax" data-params='{"url":"set_status","data":"id={{ item.id}}&name=paco&state=1"}'>
+                {{# } }}
+            </td>
+            <td>
+                <button class="layui-btn layui-btn-mini modal-iframe" data-params='{"content": "edit_role?id={{ item.id}}", "title": "编辑角色【{{ item.name }}】权限","area":"99%,99%","shade":false,"maxmin":true}'>
+                    <i class="iconfont">&#xe653;</i>编辑权限
+                </button>
+                <button class="layui-btn layui-btn-mini modal-iframe" data-params='{"content": "edit?id={{ item.id}}", "title": "编辑【{{ item.name }}】角色","area":"60%,80%","shade":false,"maxmin":true}'>
+                    <i class="iconfont">&#xe653;</i>编辑
+                </button>
+                <button class="layui-btn layui-btn-mini layui-btn-danger ajax" data-params='{"url": "./data/success.json","data":"id=1&name=ni"}'>
+                    <i class="iconfont">&#xe626;</i>删除
+                </button>
+            </td>
+        </tr>
+        {{# }); }}
         </tbody>
 
     </table>
 </script>
+
 <script>
     layui.use('list');
 </script>

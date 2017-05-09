@@ -1,0 +1,15 @@
+<div class="container-fluid larry-wrapper">
+    <div class="row">
+        <form class="layui-form layui-form-pane" action="{:url('menu/add_post')}" method="post">
+            <div class="layui-form-item permission-list">
+                <!--<label class="layui-form-label">拥有权限</label>-->
+                <div class="layui-input-block">
+                  {$data}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    layui.use('role');
+</script>
