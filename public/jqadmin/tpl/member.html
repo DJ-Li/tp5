@@ -1,0 +1,45 @@
+<script id="list-tpl" type="text/html" data-params='{"url":"./data/member.json","dataName":"memberData","pageid":"#page"}'>
+    <table id="example" class="layui-table lay-even" data-name="memberData" data-tplid="list-tpl">
+        <thead>
+            <tr>
+                <th width="30"><input type="checkbox" id="checkall" data-name="checkbox" lay-filter="check" lay-skin="primary"></th>
+                <th width="80">序号
+                    <div class="order-box">
+                        <a href="javascript:;" class="sort" data-filed="id" data-asc="true"><i class="iconfont" >&#xe615;</i></a>
+                        <a href="javascript:;" class="sort down" data-filed="id"><i class="iconfont">&#xe647;</i></a>
+                    </div>
+                </th>
+                <th width="100">头像</th>
+                <th>姓名</th>
+                <th>手机</th>
+                <th width="70">性别</th>
+                <th width="80">审核</th>
+                <th width="142">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{# layui.each(d.list, function(index, item){ }}
+            <tr>
+                <td><input type="checkbox" name="checkbox" value="{{ item.id}}" lay-skin="primary"></td>
+                <td>{{ item.id}}</td>
+                <td>
+                    <div class="img"><img src="images/upload.jpg" alt="..." class="img-thumbnail"></div>
+                </td>
+                <td class="edit" data-list='{"key":"id={{ item.id}}","filed":"name","render":"true"}' data-params='{"url":"./data/success.json","data":"id={{ item.id}}"}'>{{ item.name}}</td>
+                <td class="edit" data-list='{"key":"id={{ item.id}}","filed":"tel","render":"true"}' data-params='{"url":"./data/success.json","data":"id={{ item.id}}"}'>{{ item.tel}}</td>
+                <td>{{#if (item.sex == 1){ }}男 {{# }else if(item.sex==0){ }}女{{# }else{ }} 保密{{# } }}</td>
+                <td><input type="checkbox" name="switch" lay-skin="switch" lay-text="启用|禁用" {{#if (item.switch){ }}checked="checked" {{# } }} lay-filter="ajax" data-params='{"url":"./data/success.json","data":"id={{ item.id}}&name=paco"}'> </td>
+                <td>
+                    <button class="layui-btn layui-btn-mini modal-catch" data-params='{"content": ".add-subcat", "title": "编辑{{item.name}}","type":"1","data":"name={{ item.title}}&city=1&sorts=10&status=0&url=abc.html","area":"700px,auto","key":"id={{ item.id }}"}'>
+                        <i class="iconfont">&#xe653;</i>编辑
+                    </button>
+                    <button class="layui-btn layui-btn-mini layui-btn-danger ajax" data-list='{"key":"id={{ item.id}}","msg":true,"render":"true","action":"del"}' data-params='{"url": "./data/success.json","data":"id=1&name=ni"}'>
+                        <i class="iconfont">&#xe626;</i>删除
+                    </button></td>
+                </td>
+            </tr>
+            {{# }); }}
+        </tbody>
+
+    </table>
+</script>

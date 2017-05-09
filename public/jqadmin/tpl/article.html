@@ -1,0 +1,51 @@
+<script id="list-tpl" type="text/html" data-params='{"url":"./data/data.json","pageid":"#page","dataName":"articleData","tableWidth":"2200px"}'>
+    <table id="example" class="layui-table lay-even" data-name="articleData" data-tplid="list-tpl">
+        <thead>
+            <tr>
+                <th width="30"><input type="checkbox" id="checkall" data-name="checkbox" lay-filter="check" lay-skin="primary"></th>
+                <th width="80">序号
+                    <div class="order-box">
+                        <a href="javascript:;" class="sort" data-filed="id" data-asc="true"><i class="iconfont" >&#xe615;</i></a>
+                        <a href="javascript:;" class="sort down" data-filed="id"><i class="iconfont">&#xe647;</i></a>
+                    </div>
+                </th>
+                <th>标题
+                    <div class="order-box">
+                        <a href="javascript:;" class="sort" data-filed="title" data-asc="true"><i class="iconfont" >&#xe615;</i></a>
+                        <a href="javascript:;" class="sort down" data-filed="title"><i class="iconfont">&#xe647;</i></a>
+                    </div>
+                </th>
+                <th>连接</th>
+                <th width="80">排序
+                    <div class="order-box">
+                        <a href="javascript:;" class="sort" data-filed="id" data-asc="true"><i class="iconfont" >&#xe615;</i></a>
+                        <a href="javascript:;" class="sort down" data-filed="id"><i class="iconfont">&#xe647;</i></a>
+                    </div>
+                </th>
+                <th width="80">审核</th>
+                <th width="152">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{# layui.each(d.list, function(index, item){ }}
+            <tr>
+                <td><input type="checkbox" name="checkbox" value="{{ item.id}}" lay-skin="primary"></td>
+                <td>{{ item.id}}</td>
+                <td class="edit" data-list='{"key":"id={{ item.id}}","filed":"title","render":"true"}' data-params='{"url":"./data/success.json","data":"id={{ item.id}}"}'>{{ item.title}}</td>
+                <td>{{ item.url}}</td>
+                <td><input type="text" class="layui-input ajax-blur" data-list='{"key":"id={{ item.id}}","filed":"order","render":"true","action":"edit"}' name="order" value="{{ item.order}}" data-params='{"url":"./data/success.json","data":"id={{  item.id }}","loading":"false"}'>                    </td>
+                <td><input type="checkbox" name="switch" lay-skin="switch" data-list='{"key":"id={{ item.id}}","filed":"switch","render":"true","action":"edit"}' lay-text="已审|未审" {{#if (parseInt(item.switch)){ }}checked="checked" {{# } }} lay-filter="ajax"
+                        data-params='{"url":"./data/success.json","confirm":"true","data":"id={{ item.id}}&name=paco" {{#if (item.id==1){ }},"complete":"test"{{# } }} }' value="1"> </td>
+                <td>
+                    <button class="layui-btn layui-btn-mini modal-iframe" data-params='{"content": "article-add.html", "title": "{{item.title}}","full":"true","key":"id={{ item.id}}"}'>
+                        <i class="iconfont">&#xe653;</i>编辑
+                    </button>
+                    <button class="layui-btn layui-btn-mini layui-btn-danger ajax" data-list='{"key":"id={{ item.id}}","msg":true,"render":"true","action":"del"}' data-params='{"url": "./data/success.json","confirm":"true","data":"id=1&name=ni"}'>
+                        <i class="iconfont">&#xe626;</i>删除
+                    </button></td>
+                </td>
+            </tr>
+            {{# }); }}
+        </tbody>
+    </table>
+</script>

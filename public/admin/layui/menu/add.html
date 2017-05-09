@@ -1,0 +1,73 @@
+<div style="margin: 15px;">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级：</label>
+            <div class="layui-input-inline">
+                <select name="pid" lay-verify="required">
+                    <option value="0">作为一级菜单</option>
+                    {$tree}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+            <div class="layui-form-mid layui-word-aux">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">应用：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="app" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+            <div class="layui-form-mid layui-word-aux">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">控制器：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="control" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+            <div class="layui-form-mid layui-word-aux">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">方法：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="method" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+            <div class="layui-form-mid layui-word-aux">默认：default</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">图标：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="icon" placeholder="" autocomplete="off" class="layui-input" lay-verify="required">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注：</label>
+            <div class="layui-input-block">
+                <textarea name="remark" placeholder="" class="layui-textarea" lay-verify="required"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">状态：</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="state" checked lay-skin="switch" lay-filter="" lay-text="显示|隐藏">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型：</label>
+            <div class="layui-input-inline">
+                <select name="is_dev">
+                    <option value="0">所有人可见</option>
+                    <option value="1">仅开发者可见</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">注意：“仅开发者可见” 表示只有超级管理员可见</div>
+        </div>
+        <button lay-filter="edit" lay-submit style="display: none;"></button>
+    </form>
+</div>
+<script>
+
+</script>

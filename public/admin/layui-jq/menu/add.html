@@ -1,0 +1,115 @@
+<style>
+    body{ background: #FFFFFF}
+    /*.layui-form-label{ text-align: right!important;}*/
+    /*.layui-form-text .layui-form-label{ text-align: left!important;}*/
+</style>
+<div class="col-xs-12 col-sm-12 col-md-12">
+    <form class="layui-form layui-form-pane" action="{:url('menu/add_post')}" method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">父 级:</label>
+            <div class="layui-input-inline">
+                <select name="pid" lay-verify="required">
+                    <option value="0">作为一级菜单</option>
+                    {$tree}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">名 称:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" placeholder="" autocomplete="off" class="layui-input" lay-verify="required" value="">
+            </div>
+            <div class="layui-form-mid layui-word-aux">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">应 用:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="app" placeholder="" autocomplete="off" class="layui-input" lay-verify="required" value="">
+            </div>
+            <div class="layui-form-mid layui-word-aux">*</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">控制器:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="control" placeholder="" autocomplete="off" class="layui-input" lay-verify="required" value="">
+            </div>
+            <div class="layui-form-mid layui-word-aux">默认：default</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">方 法:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="method" placeholder="" autocomplete="off" class="layui-input" lay-verify="required" value="">
+            </div>
+            <div class="layui-form-mid layui-word-aux">默认：default</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">图 标:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="icon" placeholder="" autocomplete="off" class="layui-input" value="">
+            </div>
+            <a class="layui-btn layui-btn-small modal-iframe"
+               data-params='{"content": "demo_unicode", "title": "查看图标","area":"100%,100%"}' href="#">选择图标</a>
+        </div>
+        <div class="layui-form-item layui-form-text" style="text-align: left!important;">
+            <label class="layui-form-label">备 注</label>
+            <div class="layui-input-block">
+                <textarea name="remark" placeholder="" class="layui-textarea"></textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item" pane>
+            <label class="layui-form-label">状 态:</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="state" checked  lay-skin="switch" lay-filter="" lay-text="显示|隐藏">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+               *
+            </div>
+        </div>
+
+        <div class="layui-form-item" pane>
+            <label class="layui-form-label">可否操作</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="ban" checked  lay-skin="switch" lay-filter="" lay-text="允许|禁止">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                如：某些菜单禁止编辑、删除、隐藏等等...
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">认证状态:</label>
+            <div class="layui-input-inline">
+                <select name="type" lay-verify="required">
+                    <option value=""></option>
+                    <option value="0">只作为菜单</option>
+                    <option value="1">权限认证+菜单</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                注意：“权限认证+菜单”表示加入后台权限管理，纯碎是菜单项请不要选择此
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" jq-submit lay-filter="submit">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    layui.define(['jquery', 'jqdate', 'form', 'jqform', 'modal', 'ajax'], function (exports) {
+        var $ = layui.jquery,
+            form = layui.jqform;
+        form.set({
+            "blur": true,
+            "change": true,
+            "form": "#form1"
+        }).init();
+        modal = layui.modal;
+        //初始化
+        modal.init();
+        var layui_form = layui.form();
+    });
+</script>

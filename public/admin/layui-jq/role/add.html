@@ -1,0 +1,49 @@
+<style>
+    body{ background: #FFFFFF}
+    .layui-form-label{ text-align: right!important;}
+    .layui-form-text .layui-form-label{ text-align: left!important;}
+</style>
+<div class="col-xs-12 col-sm-12 col-md-12">
+    <form class="layui-form layui-form-pane" action="{:url('role/add_post')}" method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">角 色 昵 称:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="title" placeholder="" autocomplete="off" class="layui-input" lay-verify="required" value="">
+            </div>
+            <div class="layui-form-mid layui-word-aux">*如：客服、编辑、财务...</div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备 注:</label>
+            <div class="layui-input-block">
+                <input type="file" name="file（可随便定义）" class="layui-upload-file">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text" style="width: 50%!important;">
+            <label class="layui-form-label">备 注:</label>
+            <div class="layui-input-block">
+                <textarea name="remark" placeholder="" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" jq-submit lay-filter="submit">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    layui.define(['jquery', 'jqdate', 'form', 'jqform', 'modal', 'ajax'], function (exports) {
+        var $ = layui.jquery,
+            form = layui.jqform;
+        form.set({
+            "blur": true,
+            "change": true,
+            "form": "#form1"
+        }).init();
+        modal = layui.modal;
+        //初始化
+        modal.init();
+        var layui_form = layui.form();
+    });
+</script>
