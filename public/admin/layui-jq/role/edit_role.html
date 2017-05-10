@@ -1,10 +1,16 @@
 <div class="container-fluid larry-wrapper">
     <div class="row">
-        <form class="layui-form layui-form-pane" action="{:url('menu/add_post')}" method="post">
+        <form class="layui-form layui-form-pane" action="{:url('role/edit_role_post')}" method="post">
             <div class="layui-form-item permission-list">
-                <!--<label class="layui-form-label">拥有权限</label>-->
+                <label class="layui-form-label">拥有权限：</label>
                 <div class="layui-input-block">
                   {$data}
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" jq-submit jq-filter="submit">立即提交</button>
+                        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
                 </div>
             </div>
         </form>

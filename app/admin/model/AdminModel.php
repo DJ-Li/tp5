@@ -9,9 +9,9 @@
 namespace app\admin\model;
 
 
-use app\common\controller\AdminBase;
+use think\Model;
 
-class AdminModel extends AdminBase
+class AdminModel extends Model
 {
 
 }

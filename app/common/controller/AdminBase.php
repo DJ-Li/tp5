@@ -9,7 +9,7 @@
 namespace app\common\controller;
 
 
-use app\common\model\Authority;
+use app\common\model\AuthorityModel;
 use app\common\Tools\AjaxCode;
 use think\Config;
 use think\Controller;
@@ -47,7 +47,7 @@ class AdminBase extends Controller
         $this->uid = 1;
         $this->check_login();
         //判断有没有权限
-        $this->authority = new Authority();
+        $this->authority = new AuthorityModel();
         if (!$this->authority->check_role($this->uid)) {
             $this->check_authority();
         }

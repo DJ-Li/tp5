@@ -8,7 +8,7 @@
 
 namespace app\admin\model;
 
-use app\common\model\Authority;
+use app\common\model\AuthorityModel;
 use think\Db;
 use think\Model;
 
@@ -23,7 +23,7 @@ class MenuModel extends Model
     {
         parent::initialize();
         $this->db_authority = Db::name('role_authority');
-        $this->authority_model = new Authority();
+        $this->authority_model = new AuthorityModel();
     }
 
     /**
