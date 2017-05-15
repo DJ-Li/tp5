@@ -24,7 +24,21 @@ class RoleModel extends Model
     }
 
     /**
+     * 根据ID获取角色信息
+     * @param $id string
+     * @return array
+     */
+    public function by_id_role($id)
+    {
+        return $this->where('id',$id)->find()->toArray();
+    }
+
+    /**
      * 获取角色列表
+     * @param $pid int
+     * @param $p string
+     * @param $size string
+     * @return array
      */
     public function get_role_list($pid = 0, $p, $size)
     {
@@ -41,23 +55,9 @@ class RoleModel extends Model
             $page = ($count / $size);
         }
         $role_obj = $this->where(['pid' => $pid])->limit($limit)->order('sort')->select();
-
-        if (empty($role_obj)) {
-            return false;
-        }
         $data = [];
         foreach ($role_obj as $index => $item) {
-            $tmp = [
-                'id'          => $item['id'],
-                'name'        => $item['name'],
-                'pid'         => $item['pid'],
-                'state'       => $item['state'],
-                'remark'      => $item['remark'],
-                'add_time'    => $item['add_time'],
-                'update_time' => $item['update_time'],
-                'sort'        => $item['sort'],
-            ];
-            $data[] = $tmp;
+            $data[] = $item;
         }
         $list['list'] = $data;
         $list['page'] = $page;
@@ -66,6 +66,8 @@ class RoleModel extends Model
 
     /**
      * 添加角色
+     * @param $data array
+     * @return bool
      */
     public function add_role($data)
     {
@@ -81,14 +83,15 @@ class RoleModel extends Model
 
     /**
      * 编辑角色
+     * @param $data array
+     * @return bool
      */
-    public function edit_role($id, $data)
+    public function edit_role($data)
     {
-        if ((empty($id) || !preg_match('/^+?[1-9][0-9]*$/', $id)) || empty($data)) {
-            return false;
-        }
-        $save = $this->where(['id' => $id])->save($data);
-        if (!$save) {
+        $id = $data['id'];
+        unset($data['id']);
+        $save = $this->save($data,['id' => $id]);
+        if ($save === false) {
             return false;
         }
         return true;
@@ -132,5 +135,25 @@ class RoleModel extends Model
             $tmp .= $end_label;
         }
         return $tmp;
+    }
+
+    /**
+     * 检查排序是否重复
+     * @param $id string
+     * @param $sort string
+     * @return bool
+     */
+    public function check_order($id, $sort)
+    {
+        $data = $this->where('id', $id)->select();
+        if ($data) {
+            foreach ($data as $index => $item) {
+                if ($sort == $item['sort']) {
+                    return false;
+                    break;
+                }
+            }
+        }
+        return true;
     }
 }

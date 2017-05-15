@@ -31,21 +31,19 @@ class UserModel extends Model
 
     /**
      * 根据ID获取管理员信息
+     * @param $id string
+     * @return array
      */
     public function by_id_get_admin($id)
     {
-        if (empty($id) || !check_id($id)) {
-            return false;
-        }
-        $admin = $this->where(['id' => $id])->find();
-        if (!$admin) {
-            return false;
-        }
-        return $admin->toArray();
+        return $this->where(['id' => $id])->find()->toArray();
     }
 
     /**
      * 检查管理员登录
+     * @param $name string
+     * @param $pass string
+     * @return bool
      */
     public function login($name, $pass)
     {
@@ -75,6 +73,8 @@ class UserModel extends Model
 
     /**
      * 检查是否登录昵称是否已注册过
+     * @param $name string
+     * @return bool
      */
     public function check_name($name)
     {

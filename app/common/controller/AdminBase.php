@@ -44,7 +44,7 @@ class AdminBase extends Controller
             $this->admin = $sys_admin;
             $this->uid = $sys_admin['uid'];
         }
-        $this->uid = 1;
+       // $this->uid = 1;
         $this->check_login();
         //判断有没有权限
         $this->authority = new AuthorityModel();

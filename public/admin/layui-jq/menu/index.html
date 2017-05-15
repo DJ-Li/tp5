@@ -106,7 +106,7 @@
             <button class="layui-btn layui-btn-mini modal-iframe" data-params='{"content": "edit?id={{ item.id}}", "title": "编辑菜单","area":"80%,80%","shade":false,"maxmin":true}'>
                 <i class="iconfont">&#xe653;</i>编辑
             </button>
-            <button class="layui-btn layui-btn-mini layui-btn-danger ajax" data-params='{"url": "delete","data":"id={{ item.id }}"}'>
+            <button class="layui-btn layui-btn-mini layui-btn-danger ajax" data-params='{"url": "del","data":"id={{ item.id }}"}'>
                 <i class="iconfont">&#xe626;</i>删除
             </button>
             {{# } }}
@@ -118,7 +118,6 @@
     {{# }); }}
     {{# } }}
     {{# } }}
-
 
     <table id="example" class="layui-table lay-even" data-name="articleCatData" data-tplid="list-tpl">
         <thead>

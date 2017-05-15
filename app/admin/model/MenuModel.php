@@ -28,13 +28,13 @@ class MenuModel extends Model
 
     /**
      * 获取左边树形菜单
+     * @param $uid
+     * @param $pid int
+     * @return array
      */
     public function get_menu($uid, $pid = 0)
     {
         $menu = $this->where(['menu_pid' => $pid, 'menu_state' => 0])->order('menu_sort')->select();
-        if (empty($menu)) {
-            return false;
-        }
         $authority_data = [];
         if (!$this->authority_model->check_role($uid)) {
             $authority_data = $this->authority_model->browse_authority($uid);
@@ -60,8 +60,12 @@ class MenuModel extends Model
 
     /**
      * 生成菜单树形结构并返回option
+     * @param $id string
+     * @param $data array
+     * @param $level int
+     * @return array
      */
-    public function create_option($id, $data = '', $level = 0)
+    public function create_option($id, $data = [], $level = 0)
     {
         if (empty($data)) {
             $data = $this->get_tree();
@@ -95,13 +99,12 @@ class MenuModel extends Model
 
     /**
      * 获取左边树形菜单
+     * @param $pid int
+     * @return array
      */
     public function get_tree($pid = 0)
     {
         $menu = $this->where(['menu_pid' => $pid])->order('menu_sort')->select();
-        if (empty($menu)) {
-            return false;
-        }
         $data = [];
         foreach ($menu as $index => $item) {
             $tmp['id'] = $item['id'];
@@ -119,6 +122,10 @@ class MenuModel extends Model
 
     /**
      * 获取菜单列表
+     * @param $pid int
+     * @param $p string
+     * @param $size string
+     * @return array
      */
     public function get_menu_list($pid = 0, $p, $size)
     {
@@ -134,9 +141,6 @@ class MenuModel extends Model
         }
         $menu = $this->where(['menu_pid' => $pid])->limit($limit)->order('menu_sort')->select();
         $data = [];
-        if (empty($menu)) {
-            return false;
-        }
         foreach ($menu as $index => $item) {
             $tmp = [
                 'id' => $item['id'],
@@ -158,10 +162,13 @@ class MenuModel extends Model
 
     /**
      * 根据ID获取
+     * @param $id string
+     * @return array
      */
     public function by_id_get($id)
     {
         $list = $this->where(['id' => $id])->find();
+        $data = [];
         if ($list) {
             $data = [
                 'id' => $list['id'],
@@ -176,13 +183,14 @@ class MenuModel extends Model
                 'state' => $list['menu_state'],
                 'ban' => $list['menu_ban'],
             ];
-            return $data;
         }
-        return false;
+        return $data;
     }
 
     /**
      * 增加菜单
+     * @param $data array
+     * @return bool
      */
     public function add_menu($data)
     {
@@ -196,12 +204,11 @@ class MenuModel extends Model
 
     /**
      * 编辑菜单
+     * @param $data array
+     * @return bool
      */
     public function edit_menu($data)
     {
-        if (empty($data)) {
-            return false;
-        }
         $id = $data['id'];
         unset($data['id']);
         $edit_menu = $this->save($data, ['id' => $id]);
@@ -213,6 +220,8 @@ class MenuModel extends Model
 
     /**
      * 删除菜单
+     * @param $id string
+     * @return bool
      */
     public function delete_menu($id)
     {
@@ -229,6 +238,9 @@ class MenuModel extends Model
 
     /**
      * 检查排序是否重复
+     * @param $id string
+     * @param $sort string
+     * @return bool
      */
     public function check_order($id, $sort)
     {

@@ -50,9 +50,9 @@ class Role extends AdminBase
         $list = $this->role_model->get_role_list(0, $p, $size);
         $data = [
             'status' => 200,
-            'msg'    => '获取成功',
-            'data'   => ['list' => $list['list']],
-            'pages'  => $list['page'],
+            'msg' => '获取成功',
+            'data' => ['list' => $list['list']],
+            'pages' => $list['page'],
         ];
         return json($data);
     }
@@ -70,6 +70,12 @@ class Role extends AdminBase
      */
     public function edit()
     {
+        $id = request()->get('id');
+        if (empty($id) || !check_id($id)) {
+            return json(['status' => AjaxCode::PARAM_EMPTY, 'msg' => '参数为空']);
+        }
+        $data = $this->role_model->by_id_role($id);
+        $this->assign('list', $data);
         return $this->fetch();
     }
 
@@ -98,9 +104,36 @@ class Role extends AdminBase
             $data['add_time'] = time();
             $data[$key] = $val;
         });
-        if ($post['name']){
-            return json(['status'=>AjaxCode::PARAM_EMPTY,'msg'=>'参数为空']);
+        if (empty($data['name'])) {
+            return json(['status' => AjaxCode::PARAM_EMPTY, 'msg' => '参数为空']);
         }
+        $add = $this->role_model->add_role($data);
+        if (!$add) {
+            return json(['status' => AjaxCode::FAIL, 'msg' => '添加失败！', 'url' => '',]);
+        }
+        return json(['status' => AjaxCode::SUCCESS, 'msg' => '添加成功', 'url' => 'reload']);
+    }
+
+    /**
+     * 编辑角色处理数据
+     */
+    public function edit_post()
+    {
+        $post = $this->request->post();
+        $id = $post['id'];
+        if (empty($id) || !check_id($id)) {
+            return json(['status' => AjaxCode::PARAM_EMPTY, 'msg' => '参数为空']);
+        }
+        array_walk($post, function (&$val, $key) use (&$data) {
+            $data['update_time'] = time();
+            $data[$key] = $val;
+        });
+        unset($data['id']);
+        $update = $this->role_model->edit_role($id, $data);
+        if (!$update) {
+            return json(['status' => AjaxCode::FAIL, 'msg' => '编辑失败！', 'url' => '',]);
+        }
+        return json(['status' => AjaxCode::SUCCESS, 'msg' => '编辑成功', 'url' => 'reload']);
     }
 
     /**
@@ -136,20 +169,31 @@ class Role extends AdminBase
         }
     }
 
-    /**
-     * 编辑角色处理数据
-     */
-    public function edit_post()
-    {
-
-    }
 
     /**
      * 排序
      */
     public function set_sort()
     {
-
+        $id = $this->request->param('id');
+        $sort = $this->request->param('sort');
+        if (empty($id) || !check_id($id)) {
+            return json(['status' => AjaxCode::PARAM_VALID, 'msg' => '参数错误！']);
+        }
+        if (!check_number($sort)) {
+            return json(['status' => AjaxCode::PARAM_VALID, 'msg' => '排序参数错误！']);
+        }
+        $check_sort = $this->role_model->check_order($id, $sort);
+        //检查pid同级下的排序是否冲突
+        if (!$check_sort) {
+            return json(['status' => AjaxCode::DATA_EXIST, 'msg' => '排序起冲突！']);
+        }
+        $edit_sort = $this->role_model->where('id', $id)->setField('sort', $sort);
+        if ($edit_sort === false) {
+            return json(['status' => AjaxCode::FAIL, 'msg' => '处理失败！']);
+        } else {
+            return json(['status' => AjaxCode::SUCCESS, 'msg' => '处理成功！']);
+        }
     }
 
     /**
@@ -157,10 +201,34 @@ class Role extends AdminBase
      */
     public function set_status()
     {
-
+        $id = $this->request->param('id');
+        $state = $this->request->param('state');
+        if (empty($id) || !check_id($id)) {
+            return json(['status' => AjaxCode::PARAM_VALID, 'msg' => '参数错误！']);
+        }
+        switch ($state) {
+            case 'on':
+                $status = 1;
+                break;
+            case 'false':
+                $status = -1;
+                break;
+            default:
+                return json(['status' => AjaxCode::PARAM_VALID, 'msg' => '状态参数错误！']);
+                break;
+        }
+        $edit_state =  $this->role_model->where('id', $id)->setField('state', $status);
+        if ($edit_state === false) {
+            return json(['status' => AjaxCode::FAIL, 'msg' => '处理失败！']);
+        } else {
+            return json(['status' => AjaxCode::SUCCESS, 'msg' => '处理成功！']);
+        }
     }
 
-    public function d()
+    /**
+     * 删除
+     */
+    public function del()
     {
 
     }

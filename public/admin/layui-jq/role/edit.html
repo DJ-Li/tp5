@@ -4,18 +4,19 @@
     .layui-form-text .layui-form-label{ text-align: left!important;}
 </style>
 <div class="col-xs-12 col-sm-12 col-md-12">
-    <form class="layui-form layui-form-pane" action="{:url('role/add_post')}" method="post">
+    <form class="layui-form layui-form-pane" action="{:url('role/edit_post')}" method="post">
+        <input type="hidden" name="id" placeholder="" autocomplete="off" class="layui-input" value="{$list.id}">
         <div class="layui-form-item">
             <label class="layui-form-label">角 色 昵 称:</label>
             <div class="layui-input-inline">
-                <input type="text" name="title" placeholder="" autocomplete="off" class="layui-input" lay-verify="required" value="">
+                <input type="text" name="name" placeholder="" autocomplete="off" class="layui-input" lay-verify="required" value="{$list.name}">
             </div>
             <div class="layui-form-mid layui-word-aux">*如：客服、编辑、财务...</div>
         </div>
-        <div class="layui-form-item layui-form-text" style="width: 50%!important;">
+        <div class="layui-form-item layui-form-text">
             <label class="layui-form-label">备 注:</label>
             <div class="layui-input-block">
-                <textarea name="remark" placeholder="" class="layui-textarea"></textarea>
+                <textarea name="remark" placeholder="" class="layui-textarea">{$list.remark}</textarea>
             </div>
         </div>
         <div class="layui-form-item">

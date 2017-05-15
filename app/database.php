@@ -19,8 +19,8 @@ return [
     // 用户名
     'username'        => 'root',
     // 密码
-   // 'password'        => 'LJ140216xy89',
-    'password'        => 'Li123567890',
+    'password'        => 'LJ140216xy89',
+    //'password'        => 'Li123567890',
     // 端口
     'hostport'        => '',
     // 连接dsn
