@@ -25,7 +25,7 @@ class AdminBase extends Controller
         'Index' => [
             'index', 'welcome',
         ],
-        'User' => [
+        'Admin' => [
             'login', 'register', 'login_post', 'register_post'
         ],
     ];
@@ -80,11 +80,11 @@ class AdminBase extends Controller
      */
     protected function check_login()
     {
-        if (empty($this->uid) && !($this->request->module() == 'admin' && in_array($this->request->action(), $this->allow_visit_act['User']))) {
+        if (empty($this->uid) && !($this->request->module() == 'admin' && in_array($this->request->action(), $this->allow_visit_act['Admin']))) {
             if ($this->request->isAjax()) {
-                return $this->redirect(url('user/login'));
+                return $this->redirect(url('admin/login'));
             } else {
-                $this->redirect(url('user/login'));
+                $this->redirect(url('admin/login'));
             }
         }
     }
