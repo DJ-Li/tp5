@@ -11,6 +11,7 @@ namespace app\admin\model;
 
 use think\Model;
 use think\Request;
+use think\Session;
 
 class AdminModel extends Model
 {
@@ -34,9 +35,14 @@ class AdminModel extends Model
      * @param $id string
      * @return array
      */
-    public function by_id_get_admin($id)
+    public function by_id_admin($id)
     {
-        return $this->where(['id' => $id])->find()->toArray();
+        $list = $this->where(['id' => $id])->find();
+        $data = [];
+        if (!empty($list)){
+            $data = $list->toArray();
+        }
+        return $data;
     }
 
     /**

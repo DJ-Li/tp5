@@ -18,7 +18,7 @@
     <!--列表-->
     <section class="panel panel-padding">
         <div class="group-button">
-            <button class="layui-btn layui-btn-small modal-iframe" data-params='{"content": "add", "title": "【添加角色】","area":"50%,80%","shade":false,"maxmin":true}'>
+            <button class="layui-btn layui-btn-small modal-iframe" data-params='{"content": "add", "title": "【添加角色】","area":"50%,80%","maxmin":true}'>
                 <i class="iconfont">&#xe61c;</i> 添加角色
             </button>
         </div>
@@ -65,10 +65,10 @@
                 {{# if(item.ban == 1){ }}
                 <span>禁止操作</span>
                 {{# }else{ }}
-                <button class="layui-btn layui-btn-mini modal-iframe" data-params='{"content": "edit_role?id={{ item.id}}", "title": "编辑角色【{{ item.name }}】权限","area":"99%,99%","shade":false,"maxmin":true}'>
+                <button class="layui-btn layui-btn-mini modal-iframe" data-params='{"content": "edit_role?id={{ item.id}}", "title": "编辑角色【{{ item.name }}】权限","area":"99%,99%","maxmin":true}'>
                     <i class="iconfont">&#xe653;</i>编辑权限
                 </button>
-                <button class="layui-btn layui-btn-mini layui-btn-danger ajax" data-params='{"url": "./data/success.json","data":"id=1&name=ni"}'>
+                <button class="layui-btn layui-btn-mini layui-btn-danger" _href="{:url('role/del')}">
                     <i class="iconfont">&#xe626;</i>删除
                 </button>
                 {{# } }}
@@ -82,4 +82,8 @@
 
 <script>
     layui.use('list');
+    //    layer.confirm('是否确认删除？', {title: false, closeBtn: false, offset: ['center']}, function (index) {
+    //        location.href = url;
+    //        layer.close(index);
+    //    });
 </script>

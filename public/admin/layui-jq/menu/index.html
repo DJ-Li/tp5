@@ -27,7 +27,7 @@
                     data-params='{"url": "/php/test.php","data":"id=1&name=hao&checkbox=6,9,0&va=23"}'>
                 <i class="layui-icon">&#x1005;</i> 状态
             </button>
-            <button class="layui-btn layui-btn-small modal-iframe" data-params='{"content": "add", "title": "添加菜单","area":"80%,80%","shade":false,"maxmin":true}'>
+            <button class="layui-btn layui-btn-small modal-iframe" data-params='{"content": "add", "title": "添加菜单","area":"80%,80%","maxmin":true}'>
                 <i class="iconfont">&#xe649;</i> 添加菜单
             </button>
         </div>
@@ -37,35 +37,6 @@
     </section>
 </div>
 
-<div class="add-subcat">
-    <form id="form1" class="layui-form layui-form-pane" action="add-cat">
-        <div class="layui-form-item">
-            <label class="layui-form-label">分类名称</label>
-            <div class="layui-input-block">
-                <input type="text" name="title" required jq-verify="required" jq-error="请输入分类名称" placeholder="请输入分类名称" autocomplete="off" class="layui-input ">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">排序</label>
-            <div class="layui-input-inline">
-                <input type="text" name="title" required jq-verify="number" value="100" jq-error="排序必须为数字" placeholder="分类排序" autocomplete="off" class="layui-input ">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">状态</label>
-            <div class="layui-input-inline">
-                <input type="radio" name="status" title="启用" value="1" checked />
-                <input type="radio" name="status" title="禁用" value="0" />
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-input-block">
-                <button class="layui-btn" jq-submit jq-filter="submit">立即提交</button>
-                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-            </div>
-        </div>
-    </form>
-</div>
 <script id="list-tpl" type="text/html" data-params='{"url":"lists","dataName":"articleCatData","pageid":"#page"}'>
 
 
@@ -76,8 +47,8 @@
         <td><input type="checkbox" name="checkbox" value="{{ item.id}}" lay-skin="primary"></td>
         <td>{{ item.id}}</td>
         <td>
-            {{# for(var i=1;i<level;i++){ }}&nbsp;&nbsp;{{# } }}
-            {{# if(level > 0){ }}├{{# } }}
+            {{# for(var i=1;i<level;i++){ }}&nbsp;&nbsp;&nbsp;&nbsp;{{# } }}
+            {{# if(level > 0){ }}├─{{# } }}
             {{ item.title }}
         </td>
         <td>
@@ -97,13 +68,14 @@
 
         </td>
         <td>
-            {{# if(level != 3){ }}
-            <button class="layui-btn layui-btn-mini layui-btn-normal modal-iframe" data-params='{"content":"add?id={{ item.id}}","area":"100%,100%","title":"添加{{ item.title }}的子分类"}'>
+            {{# if(level != 4){ }}
+            <button class="layui-btn layui-btn-mini layui-btn-normal modal-iframe" data-params='{"content":"add?id={{ item.id}}","area":"100%,100%","maxmin":true,"title":"添加{{ item.title }}的子分类"}'>
                 <i class="iconfont">&#xe649;</i>添加子分类
             </button>
             {{# } }}
             {{# if(item.ban != 1){ }}
-            <button class="layui-btn layui-btn-mini modal-iframe" data-params='{"content": "edit?id={{ item.id}}", "title": "编辑菜单","area":"80%,80%","shade":false,"maxmin":true}'>
+            <!--"shade":false,-->
+            <button class="layui-btn layui-btn-mini modal-iframe" data-params='{"content": "edit?id={{ item.id}}", "title": "编辑菜单","area":"80%,80%","maxmin":true}'>
                 <i class="iconfont">&#xe653;</i>编辑
             </button>
             <button class="layui-btn layui-btn-mini layui-btn-danger ajax" data-params='{"url": "del","data":"id={{ item.id }}"}'>
@@ -145,14 +117,6 @@
 </body>
 <script>
     layui.use('list');
-
-    function strRepeat(str, count) {
-        var ret = "";
-        for (var i = 0; i < count; i++) {
-            ret += str;
-        }
-        return ret;
-    }
 </script>
 
 </html>

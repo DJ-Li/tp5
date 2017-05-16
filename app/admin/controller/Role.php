@@ -46,7 +46,7 @@ class Role extends AdminBase
         if ($p < 1 || !is_numeric($p)) {
             $p = 1;
         }
-        $size = 3;
+        $size = 10;
         $list = $this->role_model->get_role_list(0, $p, $size);
         $data = [
             'status' => 200,

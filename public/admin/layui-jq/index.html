@@ -24,9 +24,6 @@
 
             <!-- 头部右侧导航 -->
             <div class="header-right">
-
-                <button type="button" class="layui-btn  layui-btn-small my-tips" style="position: absolute; top: 14px; right:220px;"> <i class="iconfont">&#xe60c;</i> 打赏作者</button>
-                <a class="layui-btn  layui-btn-small  layui-btn-danger" style="position: absolute; top: 14px; right:340px;" href="http://www.kancloud.cn/jqcool/jqadmin" target="_blank">使用手册</a>
                 <ul class="layui-nav jqadmin-header-item right-menu">
                     <li class="layui-nav-item first">
                         <a href="javascript:;">
@@ -36,10 +33,10 @@
 
                         <dl class="layui-nav-child">
                             <dd class="tab-menu">
-                                <a href="javascript:;" data-url="user-info.html" data-title="个人信息"> <i class="iconfont " data-icon='&#xe672;'>&#xe672; </i><span>个人信息</span></a>
+                                <a href="javascript:;" data-url="{:url('admin/admin_info')}?id={$admin.uid}" data-title="个人信息"> <i class="iconfont " data-icon='&#xe672;'>&#xe672; </i><span>个人信息</span></a>
                             </dd>
                             <dd>
-                                <a href=""><i class="iconfont ">&#xe64b; </i>退出</a>
+                                <a href="{:url('admin/exit_login')}"><i class="iconfont ">&#xe64b; </i>退出</a>
                             </dd>
                         </dl>
                     </li>

@@ -18,7 +18,7 @@ use think\Request;
 class AdminBase extends Controller
 {
     protected $authority;      //权限model
-    protected $admin;            //登录用户ID
+    protected $admin;            //登录用户信息
     protected $uid;            //登录用户ID
     protected $sys_theme;      //
     private $allow_visit_act = [
@@ -40,11 +40,12 @@ class AdminBase extends Controller
         parent::_initialize();
         $this->sys_theme = Config::get('template.default_theme');
         $sys_admin = $this->request->session('sys_admin/a');
-        if (!empty($tomato_user)) {
+        $sys_admin['uid'] = 1;
+        if (!empty($sys_admin)) {
             $this->admin = $sys_admin;
             $this->uid = $sys_admin['uid'];
         }
-       // $this->uid = 1;
+        $this->uid = 1;
         $this->check_login();
         //判断有没有权限
         $this->authority = new AuthorityModel();

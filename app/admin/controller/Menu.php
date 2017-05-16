@@ -77,11 +77,15 @@ class Menu extends AdminBase
             $key = "menu_" . $key;
             $data[$key] = $val;
         });
-        if (array_key_exists('menu_state', $data)) {
-            if ($data['menu_state'] == 'on') $data['menu_state'] = '0'; else$data['menu_state'] = '1';
+        if (array_key_exists('menu_state', $data) && $data['menu_state'] == 'on') {
+            $data['menu_state'] = '0';
+        }else{
+            $data['menu_state'] = '1';
         }
-        if (array_key_exists('menu_ban', $data)) {
-            if ($data['menu_ban'] == 'on') $data['menu_ban'] = '0'; else$data['menu_ban'] = '1';
+        if (array_key_exists('menu_ban', $data) && $data['menu_ban'] == 'on') {
+            $data['menu_ban'] = '0';
+        }else{
+            $data['menu_ban'] = '1';
         }
         if (!check_number($data['menu_pid'])) {
             return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '参数错误！']);
@@ -129,17 +133,17 @@ class Menu extends AdminBase
             $key = $key == 'id' ? $key : "menu_" . $key;
             $data[$key] = $val;
         });
-        if (array_key_exists('menu_state', $data)) {
-            if ($data['menu_state'] == 'on') $data['menu_state'] = '0'; else$data['menu_state'] = '1';
+        if (array_key_exists('menu_state', $data) && $data['menu_state'] == 'on') {
+            $data['menu_state'] = '0';
+        }else{
+            $data['menu_state'] = '1';
         }
-        if (array_key_exists('menu_ban', $data)) {
-            if ($data['menu_ban'] == 'on') $data['menu_ban'] = '0'; else$data['menu_ban'] = '1';
+        if (array_key_exists('menu_ban', $data) && $data['menu_ban'] == 'on') {
+            $data['menu_ban'] = '0';
+        }else{
+            $data['menu_ban'] = '1';
         }
         if (!check_id($data['id'])) {
-            $json = [
-                'status' => AjaxCode::PARAM_VALID,
-                'msg'    => '参数错误！',
-            ];
             return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '参数错误！']);
         }
         if (!check_number($data['menu_pid'])) {

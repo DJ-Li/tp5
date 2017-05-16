@@ -41,7 +41,7 @@ class MenuModel extends Model
         }
         $data = [];
         foreach ($menu as $index => $item) {
-            $url = $item['menu_type'] == 1 ? '' : \url("$item[menu_app] /$item[menu_control]/$item[menu_method]");
+            $url = $item['menu_type'] == 0 ? '' : \url("$item[menu_app] /$item[menu_control]/$item[menu_method]");
             $tmp['id'] = $item['id'];
             $tmp['name'] = $item['menu_title'];
             $tmp['iconfont'] = $item['menu_icon'];
@@ -196,10 +196,9 @@ class MenuModel extends Model
     {
         $add_menu = $this->insert($data);
         if ($add_menu == false) {
-            return true;
+            return false;
         }
-        return false;
-
+        return true;
     }
 
     /**
