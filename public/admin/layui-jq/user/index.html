@@ -18,8 +18,8 @@
     <!--列表-->
     <section class="panel panel-padding">
         <div class="group-button">
-            <button class="layui-btn layui-btn-small modal-iframe" data-params='{"content": "add", "title": "【添加角色】","area":"50%,80%","shade":false,"maxmin":true}'>
-                <i class="iconfont">&#xe61c;</i> 添加角色
+            <button class="layui-btn layui-btn-small modal-iframe" data-params='{"content": "add", "title": "【添加管理员】","area":"50%,80%","shade":false,"maxmin":true}'>
+                <i class="iconfont">&#xe61c;</i> 添加管理员
             </button>
         </div>
         <div id="list" class="layui-form"></div>
@@ -35,9 +35,10 @@
         <tr>
             <th width="30"><input type="checkbox" id="checkall" data-name="checkbox" lay-filter="check" lay-skin="primary"></th>
             <th width="60">序号</th>
-            <th width="120">角色名称</th>
+            <th width="120">管理昵称</th>
+            <th width="120">联系方式</th>
+            <th width="120">电子邮箱</th>
             <th>描述</th>
-            <th width="80">排序</th>
             <th width="100">状态</th>
             <th width="240">操作</th>
         </tr>
@@ -47,13 +48,10 @@
         <tr>
             <td><input type="checkbox" name="checkbox" value="{{ item.id}}" lay-skin="primary"></td>
             <td>{{ item.id}}</td>
-            <td>{{ item.name}}</td>
-            <td>{{ item.remark}}</td>
-            <td>
-                <div class="layui-input-inline" style="width: 100px;">
-                    <input type="text" class="layui-input ajax-blur" name="sort" value="{{ item.sort}}" data-params='{"url":"set_sort","data":"id={{ item.id }}&name=paco&sort=1"}'>
-                </div>
-            </td>
+            <td>{{ item.user_login}}</td>
+            <td>{{ item.user_mobile}}</td>
+            <td>{{ item.user_email}}</td>
+            <td>{{ item.user_remark}}</td>
             <td>
                 {{# if(item.ban == 1){ }}
                 <span>禁止编辑</span>

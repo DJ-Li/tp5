@@ -60,53 +60,48 @@ class Menu extends AdminBase
      */
     public function add()
     {
+        if ($this->request->isPost()){//提交数据
+            $post = $this->request->post();
+            $data = [];
+            array_walk($post, function (&$val, $key) use (&$data) {
+                $key = $key == 'status'?$key:"menu_" . $key;
+                $data[$key] = $val;
+            });
+            if (array_key_exists('status', $data) && $data['status'] == 'on') {
+                $data['status'] = '-1';
+            }else{
+                $data['status'] = '1';
+            }
+            if (array_key_exists('menu_ban', $data) && $data['menu_ban'] == 'on') {
+                $data['menu_ban'] = '-1';
+            }else{
+                $data['menu_ban'] = '1';
+            }
+            if (!check_number($data['menu_pid'])) {
+                return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '参数错误！']);
+            }
+            if (empty($data['menu_title']) || empty($data['menu_app'])) {
+                return json(['status' => AjaxCode::PARAM_EMPTY, 'msg'    => '参数为空！']);
+            }
+            if (!check_number($data['status'])) {
+                return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '状态参数错误！']);
+            }
+            if (!check_number($data['menu_ban'])) {
+                return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '操作参数错误！']);
+            }
+            if (!check_number($data['menu_type'])) {
+                return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '状态参数错误！',]);
+            }
+            $add = $this->menu_model->add_menu($data);
+            if (!$add) {
+                return json(['status' => AjaxCode::FAIL, 'msg'    => '处理失败！', 'url'    => '']);
+            }
+            return json(['status' => AjaxCode::SUCCESS, 'msg' => '','url' => 'reload']);
+        }
         $pid = $this->request->get('id');
         $tree = $this->menu_model->create_option($pid);
         $this->assign('tree', $tree);
         return $this->fetch();
-    }
-    /**
-     * 增加菜单提交
-     */
-
-    public function add_post()
-    {
-        $post = $this->request->post();
-        $data = [];
-        array_walk($post, function (&$val, $key) use (&$data) {
-            $key = "menu_" . $key;
-            $data[$key] = $val;
-        });
-        if (array_key_exists('menu_state', $data) && $data['menu_state'] == 'on') {
-            $data['menu_state'] = '0';
-        }else{
-            $data['menu_state'] = '1';
-        }
-        if (array_key_exists('menu_ban', $data) && $data['menu_ban'] == 'on') {
-            $data['menu_ban'] = '0';
-        }else{
-            $data['menu_ban'] = '1';
-        }
-        if (!check_number($data['menu_pid'])) {
-            return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '参数错误！']);
-        }
-        if (empty($data['menu_title']) || empty($data['menu_app'])) {
-            return json(['status' => AjaxCode::PARAM_EMPTY, 'msg'    => '参数为空！']);
-        }
-        if (!check_number($data['menu_state'])) {
-            return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '状态参数错误！']);
-        }
-        if (!check_number($data['menu_ban'])) {
-            return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '操作参数错误！']);
-        }
-        if (!check_number($data['menu_type'])) {
-            return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '状态参数错误！',]);
-        }
-        $add = $this->menu_model->add_menu($data);
-        if (!$add) {
-            return json(['status' => AjaxCode::FAIL, 'msg'    => '处理失败！', 'url'    => '']);
-        }
-        return json(['status' => AjaxCode::SUCCESS, 'msg' => '','url' => 'reload']);
     }
 
     /**
@@ -114,58 +109,53 @@ class Menu extends AdminBase
      */
     public function edit()
     {
+        if ($this->request->isPost()){ //提交数据
+            $post = $this->request->post();
+            $data = [];
+            array_walk($post, function (&$val, $key) use (&$data) {
+                $key = $key == 'id' ? $key : "menu_" . $key;
+                $data[$key] = $val;
+            });
+            if (array_key_exists('status', $data) && $data['status'] == 'on') {
+                $data['status'] = '-1';
+            }else{
+                $data['status'] = '1';
+            }
+            if (array_key_exists('menu_ban', $data) && $data['menu_ban'] == 'on') {
+                $data['menu_ban'] = '0';
+            }else{
+                $data['menu_ban'] = '1';
+            }
+            if (!check_id($data['id'])) {
+                return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '参数错误！']);
+            }
+            if (!check_number($data['menu_pid'])) {
+                return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => 'PID参数错误！']);
+            }
+            if (empty($data['menu_title']) || empty($data['menu_app'])) {
+                return json(['status' => AjaxCode::PARAM_EMPTY, 'msg'    => '参数为空！']);
+            }
+            if (!check_number($data['status'])) {
+                return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '状态参数错误！']);
+            }
+            if (!check_number($data['menu_ban'])) {
+                return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '操作参数错误！']);
+            }
+            if (!check_number($data['menu_type'])) {
+                return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '状态参数错误！']);
+            }
+            $edit = $this->menu_model->edit_menu($data);
+            if (!$edit) {
+                return json(['status' => AjaxCode::FAIL, 'msg'    => '处理失败！']);
+            }
+            return json(['status' => AjaxCode::SUCCESS, 'msg' => '','url' => 'reload']);
+        }
         $id = $this->request->param('id');
         $list = $this->menu_model->by_id_get($id);
         $tree = $this->menu_model->create_option($list['pid']);
         $this->assign('list', $list);
         $this->assign('tree', $tree);
         return $this->fetch();
-    }
-
-    /**
-     * 编辑菜单
-     */
-    public function edit_post()
-    {
-        $post = $this->request->post();
-        $data = [];
-        array_walk($post, function (&$val, $key) use (&$data) {
-            $key = $key == 'id' ? $key : "menu_" . $key;
-            $data[$key] = $val;
-        });
-        if (array_key_exists('menu_state', $data) && $data['menu_state'] == 'on') {
-            $data['menu_state'] = '0';
-        }else{
-            $data['menu_state'] = '1';
-        }
-        if (array_key_exists('menu_ban', $data) && $data['menu_ban'] == 'on') {
-            $data['menu_ban'] = '0';
-        }else{
-            $data['menu_ban'] = '1';
-        }
-        if (!check_id($data['id'])) {
-            return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '参数错误！']);
-        }
-        if (!check_number($data['menu_pid'])) {
-            return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => 'PID参数错误！']);
-        }
-        if (empty($data['menu_title']) || empty($data['menu_app'])) {
-            return json(['status' => AjaxCode::PARAM_EMPTY, 'msg'    => '参数为空！']);
-        }
-        if (!check_number($data['menu_state'])) {
-            return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '状态参数错误！']);
-        }
-        if (!check_number($data['menu_ban'])) {
-            return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '操作参数错误！']);
-        }
-        if (!check_number($data['menu_type'])) {
-            return json(['status' => AjaxCode::PARAM_VALID, 'msg'    => '状态参数错误！']);
-        }
-        $edit = $this->menu_model->edit_menu($data);
-        if (!$edit) {
-            return json(['status' => AjaxCode::FAIL, 'msg'    => '处理失败！']);
-        }
-        return json(['status' => AjaxCode::SUCCESS, 'msg' => '','url' => 'reload']);
     }
 
     /**
@@ -225,17 +215,17 @@ class Menu extends AdminBase
             return json(['status' => AjaxCode::PARAM_VALID, 'msg' => '参数错误！']);
         }
         switch ($state) {
-            case 'on':
-                $status = 0;
+            case '1':
+                $status = -1;
                 break;
-            case 'false':
+            case '-1':
                 $status = 1;
                 break;
             default:
                 return json(['status' => AjaxCode::PARAM_VALID, 'msg' => '状态参数错误！']);
                 break;
         }
-        $edit_state = $this->menu_model->where('id', $id)->setField('menu_state', $status);
+        $edit_state = $this->menu_model->where('id', $id)->setField('status', $status);
         if ($edit_state === false) {
             return json(['status' => AjaxCode::FAIL, 'msg' => '处理失败！']);
         } else {

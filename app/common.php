@@ -8,12 +8,13 @@
 // +----------------------------------------------------------------------
 // | Author: 流年 <liu21st@gmail.com>
 // +----------------------------------------------------------------------
-
 // 应用公共文件
 
 
 /**
  * 冒泡排序小到大
+ * @param $arr array
+ * @return array
  * */
 function min_bubble($arr)
 {
@@ -37,6 +38,8 @@ function min_bubble($arr)
 
 /**
  * 冒泡排序大到小
+ * @param $arr array
+ * @return array
  */
 function max_bubble($arr)
 {
@@ -60,6 +63,8 @@ function max_bubble($arr)
 
 /**
  * 快速排序
+ * @param $arr array
+ * @return array
  */
 function quick_sort($arr)
 {
@@ -188,6 +193,7 @@ function bin_sch($array, $low, $high, $k)
  * 创建多级目录
  * @param $path string 要创建的目录
  * @param $mode int 创建目录的模式，在windows下可忽略
+ * @return string
  */
 function create_dir($path, $mode = 0777)
 {
@@ -206,6 +212,8 @@ function create_dir($path, $mode = 0777)
 
 /**
  * 遍历一个文件夹下的所有文件和子文件夹
+ * @param $dir
+ * @return array
  */
 function my_scandir($dir)
 {
@@ -230,6 +238,9 @@ function my_scandir($dir)
 /**
  * 确保多个进程同时写入同一个文件成功
  * 核心思路：加锁
+ * @param $path string
+ * @param $data string
+ * @return string
  */
 function my_lock($path, $data)
 {
@@ -249,6 +260,10 @@ function my_lock($path, $data)
 
 /**
  * 递归遍历，实现无限分类
+ * @param $arr array
+ * @param $pid int
+ * @param $level int
+ * @return array
  */
 function my_tree($arr, $pid = 0, $level = 0)
 {
@@ -266,7 +281,11 @@ function my_tree($arr, $pid = 0, $level = 0)
 
 /**
  * 算出两个文件的相对路径
+ * @param $path1 string
+ * @param $path2 string
+ * @return string
  */
+
 function releative_path($path1, $path2)
 {
     $arr1 = explode("/", dirname($path1));
@@ -295,7 +314,12 @@ function releative_path($path1, $path2)
 /**
  * 高效从一个标准url里取出文件的扩展名
  */
-/**方案一*/
+
+/**
+ * 方案二
+ * @param $url string
+ * @return string
+ */
 function get_ext1($url)
 {
     $arr = parse_url($url);
@@ -304,7 +328,12 @@ function get_ext1($url)
     return $ext[count($ext) - 1];
 }
 
-/**方案二*/
+/**
+ * 方案二
+ * @param $url string
+ * @return string
+ */
+
 function get_ext2($url)
 {
     $url = basename($url);
@@ -321,7 +350,8 @@ function get_ext2($url)
 
 /**
  * 正则检查ID
- * $id
+ * @param $id string
+ * @return boolean
  */
 
 function check_id($id)
@@ -334,7 +364,8 @@ function check_id($id)
 
 /**
  * 正则检查是数字
- * $number string
+ * @param $number string
+ * @return boolean
  */
 function check_number($number)
 {
@@ -346,8 +377,9 @@ function check_number($number)
 
 /**
  * 正则检查电话号码是否正确
- * $tel string 电话号码
- * $type string 电话类型 sj=>手机 Tel=>座机 400=> 400电话
+ * @param $tel string 电话号码
+ * @param $type string 电话类型 sj=>手机 Tel=>座机 400=> 400电话
+ * @return boolean
  */
 function check_tel($tel, $type = '')
 {
@@ -369,8 +401,8 @@ function check_tel($tel, $type = '')
 
 /**
  * 判断邮箱格式
- * $email string
- * 失败返回: false 成功返回：true
+ * @param $email string
+ * @return boolean
  */
 function check_email($email)
 {
@@ -380,22 +412,32 @@ function check_email($email)
     return false;
 }
 
+
 /**
  * 判断一个字符串是否是合法的日期模式
- * $data string
- * $type string 默认 :"Y-M-d H:i:s"
- * 否返回: false 是返回：true
+ * @param $data string 时间戳
+ * @param $type string 默认 :"Y-M-d H:i:s"
+ * @return boolean
  */
-function check_date_time($data,$type = '')
+function check_date_time($data,$type = 'Y-m-d H:i:s')
 {
-    $type = $type ?:'Y-m-d H:i:s';
     if (date($type, strtotime($data)) == $data) {
         return true;
     } else {
         return false;
     }
 }
-
+/**
+ * 时间格式
+ * @param $data string
+ * @param $type string
+ * @return  string
+ */
+function times_format($data,$type = 'Y-m-d H:i:s')
+{
+    $data = $data?:time();
+    return date($type,$data);
+}
 /**
  * 获取给定月份的上一月最后一天
  * @param $date string 给定日期
@@ -412,4 +454,18 @@ function get_last_month_last_day($date = '')
     $day = date('j', $time);//获取该日期是当前月的第几天
     return date('Y-m-d', strtotime("-{$day} days", $time));
 }
+/**
+ * MD5加密
+ * @param $str string
+ * @param $times int 加密次数
+ * @return string
+ */
+function my_md5($str, $times = 1)
+{
+    for ($i = 1; $i <= $times; $i++) {
+        $str = md5($str);
+    }
+    return $str;
+}
+
 

@@ -10,6 +10,7 @@ namespace app\admin\model;
 
 
 use app\common\model\AuthorityModel;
+use think\Db;
 use think\Model;
 
 class RoleModel extends Model
@@ -30,37 +31,35 @@ class RoleModel extends Model
      */
     public function by_id_role($id)
     {
-        return $this->where('id',$id)->find()->toArray();
+        return $this->where('id', $id)->find()->toArray();
     }
 
     /**
      * 获取角色列表
-     * @param $pid int
      * @param $p string
      * @param $size string
      * @return array
      */
-    public function get_role_list($pid = 0, $p, $size)
+    public function get_role_list($p, $size)
     {
+        $tmp = [];
+        $tmp['status'] = ['egt', -1];
         if ($size === false) {
             $limit = false;
         } else {
             $start = ($p - 1) * $size;
-            if ($pid > 0) {
-                $limit = "10";
-            } else {
-                $limit = "$start, $size";
-            }
-            $count = $this->where(['pid' => 0])->count();
+            $limit = "$start, $size";
+            $count = $this->where($tmp)->count();
             $page = ($count / $size);
         }
-        $role_obj = $this->where(['pid' => $pid])->limit($limit)->order('sort')->select();
+
+        $role_obj = $this->where($tmp)->limit($limit)->order('sort')->select();
         $data = [];
         foreach ($role_obj as $index => $item) {
             $data[] = $item;
         }
         $list['list'] = $data;
-        $list['page'] = $page;
+        $list['page'] = $page?:1;
         return $list;
     }
 
@@ -90,7 +89,7 @@ class RoleModel extends Model
     {
         $id = $data['id'];
         unset($data['id']);
-        $save = $this->save($data,['id' => $id]);
+        $save = $this->save($data, ['id' => $id]);
         if ($save === false) {
             return false;
         }
@@ -153,6 +152,57 @@ class RoleModel extends Model
                     break;
                 }
             }
+        }
+        return true;
+    }
+
+    /**
+     * 添加角色用户
+     * @param $data array
+     * @param $role_id string
+     * @return bool
+     */
+    public function add_role_admin($data, $role_id)
+    {
+        $count = $this->authority_model->where(['role_id' => $role_id])->count();
+        if ($count > 0) {
+            // 启动事务
+            $this->authority_model->startTrans();
+            try {
+                $this->authority_model->where('role_id', $role_id)->delete();
+                $this->authority_model->insertAll($data);
+                // 提交事务
+                $this->authority_model->commit();
+                return true;
+            } catch (\Exception $e) {
+                // 回滚事务
+                $this->authority_model->rollback();
+                return false;
+            }
+        } else {
+            $add = $this->authority_model->insertAll($data);
+            if ($add) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 删除角色权限
+     * @param $role_id string
+     * @return bool
+     */
+    public function del_role_admin($role_id)
+    {
+        $count = Db::name('role_admin')->where(['role_id' => $role_id])->count();
+        //如果该角色权限就删除他的所有权限，没有就直接返回true;
+        if ($count > 0) {
+            $del = Db::name('role_admin')->where('role_id', $role_id)->delete();
+            if ($del) {
+                return true;
+            }
+            return false;
         }
         return true;
     }

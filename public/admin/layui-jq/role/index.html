@@ -35,11 +35,11 @@
         <tr>
             <th width="30"><input type="checkbox" id="checkall" data-name="checkbox" lay-filter="check" lay-skin="primary"></th>
             <th width="60">序号</th>
-            <th width="120">角色名称</th>
+            <th width="120">名称</th>
             <th>描述</th>
             <th width="80">排序</th>
             <th width="100">状态</th>
-            <th width="240">操作</th>
+            <th width="300">操作</th>
         </tr>
         </thead>
         <tbody>
@@ -55,16 +55,20 @@
                 </div>
             </td>
             <td>
-                {{# if(item.ban == 1){ }}
+                {{# if(item.ban == -1){ }}
                 <span>禁止编辑</span>
                 {{# }else{ }}
-                <input type="checkbox" name="state" lay-skin="switch" lay-text="正常|异常" {{#if (item.state){ }}checked="checked" {{# } }} lay-filter="ajax" data-params='{"url":"set_status","data":"id={{ item.id}}&name=paco&state=1"}'>
+                <input type="checkbox" name="status" lay-skin="switch" lay-text="正常|异常" {{#if (item.status == 1){ }}checked="checked" {{# } }} lay-filter="ajax" data-params='{"url":"set_status","data":"id={{ item.id}}&name=paco&state={{ item.status}}"}'>
                 {{# } }}
             </td>
             <td>
-                {{# if(item.ban == 1){ }}
+                {{# if(item.ban == -1){ }}
                 <span>禁止操作</span>
                 {{# }else{ }}
+
+                <button class="layui-btn layui-btn-mini layui-btn-normal modal-iframe" data-params='{"content":"add_user?id={{ item.id}}","area":"100%,100%","maxmin":true,"title":"为角色【{{ item.name }}】添加用户"}'>
+                    <i class="iconfont">&#xe649;</i>添加用户
+                </button>
                 <button class="layui-btn layui-btn-mini modal-iframe" data-params='{"content": "edit_role?id={{ item.id}}", "title": "编辑角色【{{ item.name }}】权限","area":"99%,99%","maxmin":true}'>
                     <i class="iconfont">&#xe653;</i>编辑权限
                 </button>

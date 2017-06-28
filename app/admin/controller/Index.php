@@ -40,19 +40,11 @@ class Index extends AdminBase
     }
 
     /**
-     *
+     * 获取首页信息
      */
     public function welcome()
     {
         return $this->fetch('/welcome');
     }
-
-
-//    public function main()
-//    {
-//        return $this->fetch('/main');
-//    }
-
-
 
 }

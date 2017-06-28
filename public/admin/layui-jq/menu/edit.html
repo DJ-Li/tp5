@@ -3,7 +3,7 @@
     .layui-form-label{ width: 100px;}
 </style>
 <div class="col-xs-12 col-sm-12 col-md-12">
-    <form class="layui-form layui-form-pane" action="{:url('menu/edit_post')}" method="post">
+    <form class="layui-form layui-form-pane" action="{:url('menu/edit')}" method="post">
         <input type="hidden" name="id" placeholder="" autocomplete="off" class="layui-input" value="{$list.id}">
         <div class="layui-form-item">
             <label class="layui-form-label">父 级</label>
@@ -59,7 +59,7 @@
         <div class="layui-form-item" pane>
             <label class="layui-form-label">状 态</label>
             <div class="layui-input-inline">
-                <input type="checkbox" name="state" lay-skin="switch" lay-filter="" lay-text="显示|隐藏"  {if condition='$list.state eq 0'} checked {/if} >
+                <input type="checkbox" name="status" lay-skin="switch" lay-filter="" lay-text="显示|隐藏"  {if condition='$list.state eq 0'} checked {/if} >
             </div>
         </div>
         <div class="layui-form-item" pane>

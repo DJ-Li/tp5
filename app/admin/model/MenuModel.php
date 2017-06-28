@@ -34,7 +34,7 @@ class MenuModel extends Model
      */
     public function get_menu($uid, $pid = 0)
     {
-        $menu = $this->where(['menu_pid' => $pid, 'menu_state' => 0])->order('menu_sort')->select();
+        $menu = $this->where(['menu_pid' => $pid, 'status' => 1])->order('menu_sort')->select();
         $authority_data = [];
         if (!$this->authority_model->check_role($uid)) {
             $authority_data = $this->authority_model->browse_authority($uid);
@@ -147,7 +147,7 @@ class MenuModel extends Model
                 'title' => $item['menu_title'],
                 'ban' => $item['menu_ban'],
                 'sort' => $item['menu_sort'],
-                'state' => $item['menu_state'],
+                'status' => $item['status'],
                 'type' => $item['menu_type'],
                 'link' => $item['menu_app'] . '/' . $item['menu_control'] . '/' . $item['menu_method'],
             ];
@@ -180,7 +180,7 @@ class MenuModel extends Model
                 'icon' => $list['menu_icon'],
                 'remark' => $list['menu_remark'],
                 'type' => $list['menu_type'],
-                'state' => $list['menu_state'],
+                'status' => $list['status'],
                 'ban' => $list['menu_ban'],
             ];
         }
