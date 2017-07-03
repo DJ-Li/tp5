@@ -30,8 +30,12 @@ class AuthorityModel extends Model
      */
     public function check_role($uid)
     {
-        $role_admin = $this->field('role_id')->where(['admin_id' => $uid])->find();
-        if ($role_admin['role_id'] != 1) {
+        $role= $this
+            ->field('ban')
+            ->join('__ROLE__ role','role.id = role_admin.role_id')
+            ->where(['admin_id' => $uid])
+            ->find();
+        if ($role['ban'] != -1) { //超级管理员
             return false;
         }
         return true;

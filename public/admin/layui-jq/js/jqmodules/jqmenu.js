@@ -98,7 +98,7 @@ layui.define(['jquery', 'laytpl', 'tabmenu', 'layer', 'elem'], function(exports)
                     }
                     _this.render(ret.data);
 
-                } else {
+                }else {
                     layer.msg('请求数据出错，请稍后再试...');
                     return;
                 }

@@ -13,6 +13,7 @@ use app\common\model\AuthorityModel;
 use app\common\Tools\AjaxCode;
 use think\Config;
 use think\Controller;
+use think\Db;
 use think\Request;
 
 class AdminBase extends Controller
@@ -22,17 +23,33 @@ class AdminBase extends Controller
     protected $uid;            //登录用户ID
     protected $sys_theme;      //
     private $allow_visit_act = [
-        'Index' => [
+        'index' => [
             'index', 'welcome',
         ],
-        'Admin' => [
-            'login', 'register', 'login_post', 'register_post'
+        'user' => [
+            'login', 'register', 'memory', 'login_out'
         ],
     ];
 
-    public function __construct(Request $request)
+    /**
+     * 返回json
+     * @param $code string 消息码
+     * @param $msg string 提示信息
+     * @param $list array 数据
+     * @param $pages string 分页
+     * @param $url string 跳转路径
+     * @return boolean
+     */
+    protected function json($code,$msg,$list = [],$pages = '',$url='')
     {
-        parent::__construct($request);
+        $data = [
+            'status' => $code,
+            'msg' => $msg,
+            'data' => $list?:(object)$list,
+            'url' => $url,
+            'pages' => $pages,
+        ];
+        return json($data);
     }
 
     public function _initialize()
@@ -40,18 +57,17 @@ class AdminBase extends Controller
         parent::_initialize();
         $this->sys_theme = Config::get('template.default_theme');
         $sys_admin = $this->request->session('sys_admin/a');
-        $sys_admin['uid'] = 1;
         if (!empty($sys_admin)) {
-            $this->admin = $sys_admin;
             $this->uid = $sys_admin['uid'];
+            $this->admin = $sys_admin;
         }
-        $this->uid = 1;
-        $this->check_login();
+          $this->check_login();
         //判断有没有权限
         $this->authority = new AuthorityModel();
         if (!$this->authority->check_role($this->uid)) {
             $this->check_authority();
         }
+        //用户信息
         $this->assign('admin', $this->admin);
     }
 
@@ -61,6 +77,7 @@ class AdminBase extends Controller
             '__ADMIN_PUBLIC__' => WEB_URL . 'public/admin/' . $this->sys_theme,
             '__WEB_URL__' => WEB_URL,
         ];
+
         if ($this->request->module() != 'admin') {
             $template_prefix = "admin@" . $this->sys_theme . '/' . $this->request->module() . '/';
         } else {
@@ -73,19 +90,19 @@ class AdminBase extends Controller
         if (!($this->request->module() == 'admin' && $this->request->controller() == 'Index' && ($this->request->action() == 'index' || $this->request->action() == 'welcome'))) {
             $this->view->engine->layout('admin/' . $template_prefix . 'layout.html');
         }
+       // dump($template);
         return parent::fetch($template, $vars, $replace, $config);
     }
-
     /**
      * 检查用户登录
      */
     protected function check_login()
     {
-        if (empty($this->uid) && !($this->request->module() == 'admin' && in_array($this->request->action(), $this->allow_visit_act['Admin']))) {
+        if (empty($this->uid) && !($this->request->module() == 'admin' && in_array($this->request->action(), $this->allow_visit_act['user']))) {
             if ($this->request->isAjax()) {
-                return $this->redirect(url('admin/login'));
+                return $this->redirect(url('user/login'));
             } else {
-                $this->redirect(url('admin/login'));
+                $this->redirect(url('user/login'));
             }
         }
     }
@@ -99,17 +116,18 @@ class AdminBase extends Controller
         $authority_data = $this->authority->operation_authority($this->uid);
         $flag = false;
         foreach ($authority_data as $index => $item) {
+
             if ($item == $this->request->module() . '/' . $this->request->controller() . '/' . $this->request->action()) {
                 $flag = true;
                 break;
             }
         }
-        if (!($this->request->module() == 'admin' && in_array($this->request->action(), $this->allow_visit_act[$this->request->controller()]))) {
-            if (!$flag) {
+        if (!$flag) {
+            if (!($this->request->module() == 'admin' && in_array($this->request->action(), $this->allow_visit_act['user']))) {
                 if ($this->request->isAjax()) {
                     return json(['status' => AjaxCode::NO_AUTHORITY, 'msg' => '没有权限!']);
                 } else {
-                    $this->_empty('authority');
+                   $this->_empty('authority');
                 }
             }
         }
@@ -124,6 +142,80 @@ class AdminBase extends Controller
     {
         echo $this->fetch($name);
         exit;
+    }
+
+
+    /**
+     * 获取一张表数据列表
+     * @param $table_name string 表名称
+     * @param $where array 条件
+     * @param $order array 排序
+     * @param $p string 分页数
+     * @param $size string 每页条数
+     * @param $group string 分组字段
+     * @return array
+     */
+    public function get_list($table_name, $where = [], $order = [], $p, $size, $group = '')
+    {
+        if ($size === false) {
+            $limit = false;
+        } else {
+            $start = ($p - 1) * $size;
+            $limit = "$start, $size";
+            $count = Db::name($table_name)->where($where)->count();
+            $page = ($count / $size);
+        }
+        $list = Db::name($table_name)->where($where)->order($order)->limit($limit)->group($group)->select();
+        $data = [];
+        foreach ($list as $index => $item) {
+            $data[] = $item;
+        }
+        $lists['list'] = $data;
+        $lists['page'] = $page ?: 1;
+        $lists['total'] = $count;
+        return $lists;
+    }
+
+
+    /**
+     * 添加数据
+     * @param $table_name array
+     * @param $data array
+     * @return boolean
+     */
+
+    public function add_post($table_name,$data)
+    {
+        if (empty($data)) {
+            return false;
+        }
+        $insert = Db::name($table_name)->insert($data);
+        if ($insert == false) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 编辑数据
+     * @param $table_name array
+     * @param $data array
+     * @param $tel string
+     * @return bool
+     */
+    public function edit_post($table_name,$data,$tel='')
+    {
+        if ($tel){ //只限于修改用户修改根据手机最为条件
+            $map['user_mobile'] = $tel;
+        }else{
+            $map['id'] = $data['id'];
+            unset($data['id']);
+        }
+        $save = Db::name($table_name)->save($data,$map);
+        if ($save === false) {
+            return false;
+        }
+        return true;
     }
 
 }

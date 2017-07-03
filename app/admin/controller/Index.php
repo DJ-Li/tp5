@@ -26,7 +26,7 @@ class Index extends AdminBase
      */
     public function index()
     {
-        return $this->fetch('/index');
+        return $this->fetch('index');
     }
 
     /**
@@ -34,9 +34,21 @@ class Index extends AdminBase
      */
     public function get_menu()
     {
-        $msg['data']['list'] = $this->menu_model->get_menu($this->uid,0);
-        $msg['status'] = 200;
-        return json($msg);
+        $msg = $this->menu_model->get_menu($this->uid,0);
+        if (!empty($msg)){
+            $data = [
+                'status' => AjaxCode::SUCCESS,
+                'msg' => '获取成功',
+                'data' => ['list' => $msg],
+            ];
+        }else{
+            $data = [
+                'status' => AjaxCode::FAIL,
+                'msg' => '获取失败',
+                'data' => ['list' => $msg],
+            ];
+        }
+        return json($data);
     }
 
     /**
@@ -44,7 +56,7 @@ class Index extends AdminBase
      */
     public function welcome()
     {
-        return $this->fetch('/welcome');
+        return $this->fetch('welcome');
     }
 
 }

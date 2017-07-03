@@ -27,7 +27,7 @@
                 <ul class="layui-nav jqadmin-header-item right-menu">
                     <li class="layui-nav-item first">
                         <a href="javascript:;">
-                            <cite> admin</cite>
+                            <cite>{$admin['name']}</cite>
                             <span class="layui-nav-more"></span>
                         </a>
 
@@ -35,8 +35,8 @@
                             <dd class="tab-menu">
                                 <a href="javascript:;" data-url="{:url('user/user_info')}?id={$admin.uid}" data-title="个人信息"> <i class="iconfont " data-icon='&#xe672;'>&#xe672; </i><span>个人信息</span></a>
                             </dd>
-                            <dd>
-                                <a href="{:url('admin/exit_login')}"><i class="iconfont ">&#xe64b; </i>退出</a>
+                            <dd class="tab-menu">
+                                <a href="{:url('user/login_out')}" data-title="退出登录"><i class="iconfont ">&#xe64b; </i><span>退出登录</span></a>
                             </dd>
                         </dl>
                     </li>
