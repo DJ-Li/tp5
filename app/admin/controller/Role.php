@@ -19,7 +19,7 @@ use app\common\Tools\AjaxCode;
 
 class Role extends AdminBase
 {
-    protected $role_model, $menu_model, $authority_model,$user_model;
+    protected $role_model, $menu_model, $authority_model, $user_model;
 
     public function _initialize()
     {
@@ -48,24 +48,13 @@ class Role extends AdminBase
         if ($p < 1 || !is_numeric($p)) {
             $p = 1;
         }
-        $size = 10;
-        $list = $this->role_model->get_role_list($p, $size);
-        if (!empty($list['list'])){
-            $data = [
-                'status' => AjaxCode::SUCCESS,
-                'msg' => '获取成功',
-                'data' => ['list' => $list['list']],
-                'pages' => $list['page'],
-            ];
-        }else{
-            $data = [
-                'status' => AjaxCode::FAIL,
-                'msg' => '获取失败',
-                'data' => ['list' => $list['list']],
-                'pages' => $list['page'],
-            ];
+        $list = $this->role_model->get_role_list($p, $this->size);
+        if (!empty($list['list'])) {
+            $data['list'] = $list['list'];
+            return self::json(AjaxCode::SUCCESS, '获取成功', $data, $list['page']);
+        } else {
+            return self::json(AjaxCode::SUCCESS, '获取失败');
         }
-        return json($data);
     }
 
     /**
@@ -73,7 +62,7 @@ class Role extends AdminBase
      */
     public function add()
     {
-        if ($this->request->isPost()){//提交数据
+        if ($this->request->isPost()) {//提交数据
             $post = $this->request->post();
             $data = [];
             array_walk($post, function (&$val, $key) use (&$data) {
@@ -81,13 +70,13 @@ class Role extends AdminBase
                 $data[$key] = $val;
             });
             if (empty($data['name'])) {
-                return json(['status' => AjaxCode::PARAM_EMPTY, 'msg' => '参数为空']);
+                return self::json(AjaxCode::PARAM_EMPTY, '参数为空');
             }
             $add = $this->role_model->add_role($data);
             if (!$add) {
-                return json(['status' => AjaxCode::FAIL, 'msg' => '添加失败！', 'url' => '',]);
+                return self::json(AjaxCode::FAIL, '添加失败！', [],0, '');
             }
-            return json(['status' => AjaxCode::SUCCESS, 'msg' => '添加成功', 'url' => 'reload']);
+            return self::json(AjaxCode::SUCCESS, '添加成功', [],0, 'reload');
         }
         return $this->fetch();
     }
@@ -97,11 +86,11 @@ class Role extends AdminBase
      */
     public function edit()
     {
-        if ($this->request->isPost()){//提交数据
+        if ($this->request->isPost()) {//提交数据
             $post = $this->request->post();
             $id = $post['id'];
             if (empty($id) || !check_id($id)) {
-                return json(['status' => AjaxCode::PARAM_EMPTY, 'msg' => '参数为空']);
+                return self::json(AjaxCode::PARAM_EMPTY, '参数为空');
             }
             array_walk($post, function (&$val, $key) use (&$data) {
                 $data['update_time'] = time();
@@ -110,13 +99,13 @@ class Role extends AdminBase
             unset($data['id']);
             $update = $this->role_model->edit_role($id, $data);
             if (!$update) {
-                return json(['status' => AjaxCode::FAIL, 'msg' => '编辑失败！', 'url' => '',]);
+                return self::json(AjaxCode::FAIL, '编辑失败！',[],0, '');
             }
-            return json(['status' => AjaxCode::SUCCESS, 'msg' => '编辑成功', 'url' => 'reload']);
+            return self::json(AjaxCode::SUCCESS, '编辑成功', [],0, 'reload');
         }
         $id = request()->get('id');
         if (empty($id) || !check_id($id)) {
-            return json(['status' => AjaxCode::PARAM_EMPTY, 'msg' => '参数为空']);
+            return self::json(AjaxCode::PARAM_EMPTY, '参数为空');
         }
         $data = $this->role_model->by_id_role($id);
         $this->assign('list', $data);
@@ -128,11 +117,11 @@ class Role extends AdminBase
      */
     public function edit_role()
     {
-        if ($this->request->isPost()){
+        if ($this->request->isPost()) {
             $post = $this->request->post();
             $role_id = $post['role_id'];
             if (empty($role_id) || !check_id($role_id)) {
-                return json(['status' => AjaxCode::PARAM_ERROR, 'msg' => '参数错误！', 'url' => '',]);
+                return json(AjaxCode::PARAM_ERROR, '参数错误！', [],0, '');
             }
             if (!empty($post['role'])) {
                 $data = [];
@@ -145,20 +134,20 @@ class Role extends AdminBase
                 }
                 $add = $this->authority_model->add_role_authority($data, $role_id);
                 if (!$add) {
-                    return json(['status' => AjaxCode::FAIL, 'msg' => '处理失败！', 'url' => '',]);
+                    return self::json(AjaxCode::FAIL, '处理失败！', [],0, '');
                 }
-                return json(['status' => AjaxCode::SUCCESS, 'msg' => '处理成功', 'url' => 'reload']);
+                return self::json(AjaxCode::SUCCESS, '处理成功', [],0, 'reload');
             } else {
                 $del = $this->authority_model->del_role_authority($role_id);
                 if (!$del) {
-                    return json(['status' => AjaxCode::FAIL, 'msg' => '处理失败！', 'url' => '',]);
+                    return self::json(AjaxCode::FAIL, '处理失败！', '');
                 }
-                return json(['status' => AjaxCode::SUCCESS, 'msg' => '处理成功', 'url' => 'reload']);
+                return self::json(AjaxCode::SUCCESS, '处理成功', 'reload');
             }
         }
         $role_id = $this->request->get('id');
         if (empty($role_id) || !check_id($role_id)) {
-            return json(['status' => AjaxCode::PARAM_ERROR, 'msg' => '参数错误！', 'url' => '',]);
+            return self::json(AjaxCode::PARAM_ERROR, '参数错误！', [],0, '');
         }
         $list = $this->menu_model->get_tree(0);
         $data = $this->role_model->create_role($list, $role_id, 0);
@@ -175,7 +164,7 @@ class Role extends AdminBase
         if ($this->request->isPost()) {
             $post = $this->request->post();
             if (empty($post['role_id']) || !check_id($post['role_id'])) {
-                return json(['status' => AjaxCode::PARAM_ERROR, 'msg' => '参数错误！', 'url' => '',]);
+                return self::json(AjaxCode::PARAM_ERROR, '参数错误！', [],0, '');
             }
             if (!empty($post['user'])) {
                 $data = [];
@@ -187,27 +176,27 @@ class Role extends AdminBase
                 }
                 $add = $this->role_model->add_role_admin($data, $post['role_id']);
                 if (!$add) {
-                    return json(['status' => AjaxCode::FAIL, 'msg' => '处理失败！', 'url' => '',]);
+                    return self::json(AjaxCode::FAIL, '处理失败！', [],0, '');
                 }
-                return json(['status' => AjaxCode::SUCCESS, 'msg' => '处理成功', 'url' => 'reload']);
+                return self::json(AjaxCode::SUCCESS, '处理成功', [],0, 'reload');
             } else {
                 $del = $this->role_model->del_role_admin($post['role_id']);
                 if (!$del) {
-                    return json(['status' => AjaxCode::FAIL, 'msg' => '处理失败！', 'url' => '',]);
+                    return self::json(AjaxCode::FAIL, '处理失败！', [],0, '');
                 }
-                return json(['status' => AjaxCode::SUCCESS, 'msg' => '处理成功', 'url' => 'reload']);
+                return self::json(AjaxCode::SUCCESS, '处理成功', [],0, 'reload');
             }
         }
         $role_id = $this->request->get('id');
         if (empty($role_id) || !check_id($role_id)) {
-            return json(['status' => AjaxCode::PARAM_ERROR, 'msg' => '参数错误！', 'url' => '',]);
+            return self::json(AjaxCode::PARAM_ERROR, '参数错误！', [],0, '');
         }
-        $list= $this->user_model->field('id,user_login')->where(['status' => ['egt',-1],'user_type' => 1])->select();
+        $list = $this->user_model->field('id,user_login')->where(['status' => ['egt', -1], 'user_type' => 1])->select();
         $data = [];
-        foreach ($list as $index => $item){
+        foreach ($list as $index => $item) {
             $data[] = $item->toArray();
         }
-        $arr = $this->user_model->create_user($data,$role_id);
+        $arr = $this->user_model->create_user($data, $role_id);
         $user = "<ul><input type='hidden' name='role_id' value='{$role_id}'" . $arr . "</ul>";
         $this->assign('data', $user);
         return $this->fetch();
@@ -221,21 +210,21 @@ class Role extends AdminBase
         $id = $this->request->param('id');
         $sort = $this->request->param('sort');
         if (empty($id) || !check_id($id)) {
-            return json(['status' => AjaxCode::PARAM_ERROR, 'msg' => '参数错误！']);
+            return self::json(AjaxCode::PARAM_ERROR, '参数错误！');
         }
         if (!check_number($sort)) {
-            return json(['status' => AjaxCode::PARAM_ERROR, 'msg' => '排序参数错误！']);
+            return self::json(AjaxCode::PARAM_ERROR, '排序参数错误！');
         }
         $check_sort = $this->role_model->check_order($id, $sort);
         //检查pid同级下的排序是否冲突
         if (!$check_sort) {
-            return json(['status' => AjaxCode::DATA_EXIST, 'msg' => '排序起冲突！']);
+            return self::json(AjaxCode::DATA_EXIST, '排序起冲突！');
         }
         $edit_sort = $this->role_model->where('id', $id)->setField('sort', $sort);
         if ($edit_sort === false) {
-            return json(['status' => AjaxCode::FAIL, 'msg' => '处理失败！']);
+            return self::json(AjaxCode::FAIL, '处理失败！');
         } else {
-            return json(['status' => AjaxCode::SUCCESS, 'msg' => '处理成功！']);
+            return self::json(AjaxCode::SUCCESS, '处理成功！');
         }
     }
 
@@ -248,7 +237,7 @@ class Role extends AdminBase
         $id = $this->request->param('id');
         $state = $this->request->param('state');
         if (empty($id) || !check_id($id)) {
-            return json(['status' => AjaxCode::PARAM_ERROR, 'msg' => '参数错误！']);
+            return self::json(AjaxCode::PARAM_ERROR, '参数错误！');
         }
         switch ($state) {
             case -1:
@@ -258,14 +247,14 @@ class Role extends AdminBase
                 $status = -1;
                 break;
             default:
-                return json(['status' => AjaxCode::PARAM_ERROR, 'msg' => '状态参数错误！']);
+                return self::json(AjaxCode::PARAM_ERROR, '状态参数错误！');
                 break;
         }
-        $edit_state =  $this->role_model->where('id', $id)->setField('status', $status);
+        $edit_state = $this->role_model->where('id', $id)->setField('status', $status);
         if ($edit_state === false) {
-            return json(['status' => AjaxCode::FAIL, 'msg' => '处理失败！']);
+            return self::json(AjaxCode::FAIL, '处理失败！');
         } else {
-            return json(['status' => AjaxCode::SUCCESS, 'msg' => '处理成功！']);
+            return self::json(AjaxCode::SUCCESS, '处理成功！');
         }
     }
 

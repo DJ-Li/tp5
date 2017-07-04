@@ -53,10 +53,10 @@
             <td>{{ item.user_email}}</td>
             <td>{{ item.user_remark}}</td>
             <td>
-                {{# if(item.ban == 1){ }}
+                {{# if(item.ban == -1){ }}
                 <span>禁止编辑</span>
                 {{# }else{ }}
-                <input type="checkbox" name="state" lay-skin="switch" lay-text="正常|异常" {{#if (item.state){ }}checked="checked" {{# } }} lay-filter="ajax" data-params='{"url":"set_status","data":"id={{ item.id}}&name=paco&state=1"}'>
+                <input type="checkbox" name="status" lay-skin="switch" lay-text="正常|禁用" {{#if (item.status == 1){ }}checked="checked" {{# } }} lay-filter="ajax" data-params='{"url":"set_status","data":"id={{ item.id}}&name=paco&state={{ #item.status  }}"}'>
                 {{# } }}
             </td>
             <td>

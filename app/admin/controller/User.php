@@ -44,24 +44,14 @@ class User extends AdminBase
         $order = [
             'id' => 'desc',
         ];
-        $size = 3;
-        $list = $this->get_list('user', $tmp, $order, $p, $size);
-        if (!empty($list['list'])){
-            $data = [
-                'status' => AjaxCode::SUCCESS,
-                'msg' => '获取成功',
-                'data' => ['list' => $list['list']],
-                'pages' => $list['page'],
-            ];
-        }else{
-            $data = [
-                'status' => AjaxCode::FAIL,
-                'msg' => '获取失败',
-                'data' => ['list' => $list['list']],
-                'pages' => $list['page'],
-            ];
+
+        $list = $this->get_list('user', $tmp, $order, $p, $this->size);
+        if (!empty($list['list'])) {
+            $data['list'] = $list['list'];
+            return self::json(AjaxCode::SUCCESS, '获取成功', $data, $list['page']);
+        } else {
+            return self::json(AjaxCode::SUCCESS, '获取失败');
         }
-        return json($data);
     }
 
     /**
@@ -145,14 +135,14 @@ class User extends AdminBase
                 $data[$key] = trim($val);
             });
             if (!captcha_check($data['user_verify']) || empty($data['user_verify'])) {
-                return json(['status' => AjaxCode::PARAM_ERROR, 'msg' => '验证码不正确!']);
+                return self::json(AjaxCode::PARAM_ERROR, '验证码不正确!');
             }
             $bool = $this->user_model->check_login($data['user_login'], $data['user_pass']);
 
             if (!$bool) {
-                return json(['status' => AjaxCode::PARAM_ERROR, 'msg' => '用户账户或密码错误!']);
+                return self::json(AjaxCode::PARAM_ERROR, '用户账户或密码错误!');
             }
-            return json(['status' => AjaxCode::SUCCESS, 'msg' => '登录成功!','url' => url('index/')]);
+            return self::json(AjaxCode::SUCCESS, '登录成功!', [],0, url('index/index'));
         }
         return $this->fetch('/login');
     }
@@ -173,9 +163,9 @@ class User extends AdminBase
     {
         $verify = $this->request->post('verify');
         if (!captcha_check($verify) || $verify == '') {
-            return json(['status' => AjaxCode::PARAM_ERROR, 'msg' => '验证码不正确!']);
+            return self::json(AjaxCode::PARAM_ERROR, '验证码不正确!');
         } else {
-            return json(['status' => AjaxCode::SUCCESS, 'msg' => '验证码成功!']);
+            return self::json(AjaxCode::SUCCESS, '验证码成功!');
         }
     }
 

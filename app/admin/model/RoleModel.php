@@ -50,7 +50,7 @@ class RoleModel extends Model
             $start = ($p - 1) * $size;
             $limit = "$start, $size";
             $count = $this->where($tmp)->count();
-            $page = ($count / $size);
+            $page = ceil($count / $size);
         }
 
         $role_obj = $this->where($tmp)->limit($limit)->order('sort')->select();
@@ -59,7 +59,7 @@ class RoleModel extends Model
             $data[] = $item;
         }
         $list['list'] = $data;
-        $list['page'] = $page?:1;
+        $list['page'] = $page;
         return $list;
     }
 

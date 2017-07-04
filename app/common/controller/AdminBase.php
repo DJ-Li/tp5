@@ -22,6 +22,7 @@ class AdminBase extends Controller
     protected $admin;            //登录用户信息
     protected $uid;            //登录用户ID
     protected $sys_theme;      //
+    protected $size;
     private $allow_visit_act = [
         'index' => [
             'index', 'welcome',
@@ -31,37 +32,17 @@ class AdminBase extends Controller
         ],
     ];
 
-    /**
-     * 返回json
-     * @param $code string 消息码
-     * @param $msg string 提示信息
-     * @param $list array 数据
-     * @param $pages string 分页
-     * @param $url string 跳转路径
-     * @return boolean
-     */
-    protected function json($code,$msg,$list = [],$pages = '',$url='')
-    {
-        $data = [
-            'status' => $code,
-            'msg' => $msg,
-            'data' => $list?:(object)$list,
-            'url' => $url,
-            'pages' => $pages,
-        ];
-        return json($data);
-    }
-
     public function _initialize()
     {
         parent::_initialize();
+        $this->size = 10;
         $this->sys_theme = Config::get('template.default_theme');
         $sys_admin = $this->request->session('sys_admin/a');
         if (!empty($sys_admin)) {
             $this->uid = $sys_admin['uid'];
             $this->admin = $sys_admin;
         }
-          $this->check_login();
+        $this->check_login();
         //判断有没有权限
         $this->authority = new AuthorityModel();
         if (!$this->authority->check_role($this->uid)) {
@@ -90,9 +71,10 @@ class AdminBase extends Controller
         if (!($this->request->module() == 'admin' && $this->request->controller() == 'Index' && ($this->request->action() == 'index' || $this->request->action() == 'welcome'))) {
             $this->view->engine->layout('admin/' . $template_prefix . 'layout.html');
         }
-       // dump($template);
+        // dump($template);
         return parent::fetch($template, $vars, $replace, $config);
     }
+
     /**
      * 检查用户登录
      */
@@ -127,7 +109,7 @@ class AdminBase extends Controller
                 if ($this->request->isAjax()) {
                     return json(['status' => AjaxCode::NO_AUTHORITY, 'msg' => '没有权限!']);
                 } else {
-                   $this->_empty('authority');
+                    $this->_empty('authority');
                 }
             }
         }
@@ -137,6 +119,7 @@ class AdminBase extends Controller
 
     /**
      * 访问错误跳转页面
+     * @param $name
      */
     public function _empty($name)
     {
@@ -144,6 +127,24 @@ class AdminBase extends Controller
         exit;
     }
 
+    /**
+     * 返回json
+     * @param $code int 消息码
+     * @param $msg string 提示信息
+     * @param $list array 数据
+     * @param $pages int 分页
+     * @param $url string 跳转路径
+     * @return boolean
+     */
+    protected static function json($code, $msg, $list = [], $pages = 0, $url = '')
+    {
+        $data['status'] = $code;
+        $data['msg'] = $msg;
+        $data['data'] = $list;
+        $data['pages'] = $pages;
+        $data['url'] = $url;
+        return json($data);
+    }
 
     /**
      * 获取一张表数据列表
@@ -184,7 +185,7 @@ class AdminBase extends Controller
      * @return boolean
      */
 
-    public function add_post($table_name,$data)
+    public function add_post($table_name, $data)
     {
         if (empty($data)) {
             return false;
@@ -203,15 +204,15 @@ class AdminBase extends Controller
      * @param $tel string
      * @return bool
      */
-    public function edit_post($table_name,$data,$tel='')
+    public function edit_post($table_name, $data, $tel = '')
     {
-        if ($tel){ //只限于修改用户修改根据手机最为条件
+        if ($tel) { //只限于修改用户修改根据手机最为条件
             $map['user_mobile'] = $tel;
-        }else{
+        } else {
             $map['id'] = $data['id'];
             unset($data['id']);
         }
-        $save = Db::name($table_name)->save($data,$map);
+        $save = Db::name($table_name)->save($data, $map);
         if ($save === false) {
             return false;
         }

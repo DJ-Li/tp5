@@ -157,6 +157,7 @@ class MenuModel extends Model
             }
             $data[] = $tmp;
         }
+        $arr['list'] = $data;
         return $data;
     }
 
