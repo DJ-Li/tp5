@@ -65,16 +65,16 @@ class Menu extends AdminBase
                 $data[$key] = trim($val);
             });
             if (array_key_exists('status', $data) && $data['status'] == 'on') {
-                $data['status'] = '-1';
-            } else {
                 $data['status'] = '1';
+            } else {
+                $data['status'] = '-1';
             }
             if (array_key_exists('menu_ban', $data) && $data['menu_ban'] == 'on') {
-                $data['menu_ban'] = '-1';
-            } else {
                 $data['menu_ban'] = '1';
+            } else {
+                $data['menu_ban'] = '-1';
             }
-            if (!check_number($data['menu_pid'])) {
+            if (!check_id($data['menu_pid'])) {
                 return self::json(AjaxCode::PARAM_ERROR, '参数错误！');
             }
             if (empty($data['menu_title']) || empty($data['menu_app'])) {
@@ -87,7 +87,7 @@ class Menu extends AdminBase
                 return self::json(AjaxCode::PARAM_ERROR, '操作参数错误！');
             }
             if (!check_number($data['menu_type'])) {
-                return self::json(AjaxCode::PARAM_ERROR, '状态参数错误！');
+                return self::json(AjaxCode::PARAM_ERROR, '认证状态参数错误！');
             }
             $add = $this->menu_model->add_menu($data);
             if (!$add) {

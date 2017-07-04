@@ -18,6 +18,15 @@
     <!--列表-->
     <section class="panel panel-padding">
         <div class="group-button">
+            <button class="layui-btn layui-btn-small layui-btn-danger ajax-all" data-name="checkbox"
+                    data-params='{"url": "/php/test.php","data":"id=1&name=ni&checkbox=6,9,0&va=23"}'>
+                <i class="iconfont">&#xe626;</i> 删除
+            </button>
+
+            <button class="layui-btn layui-btn-small layui-btn-normal ajax-all" data-name="checkbox"
+                    data-params='{"url": "/php/test.php","data":"id=1&name=hao&checkbox=6,9,0&va=23"}'>
+                <i class="layui-icon">&#x1005;</i> 状态
+            </button>
             <button class="layui-btn layui-btn-small modal-iframe" data-params='{"content": "add", "title": "【添加角色】","area":"50%,80%","maxmin":true}'>
                 <i class="iconfont">&#xe61c;</i> 添加角色
             </button>
@@ -28,16 +37,20 @@
     </section>
 </div>
 
-
-<script id="list-tpl" type="text/html" data-params='{"url":"lists","pageid":"#page"}'>
-    <table id="example" class="layui-table lay-even">
+<script id="list-tpl" type="text/html" data-params='{"url":"lists","dataName":"articleCatData","pageid":"#page"}'>
+    <table id="example" class="layui-table lay-even" data-name="articleCatData" data-tplid="list-tpl">
         <thead>
         <tr>
             <th width="30"><input type="checkbox" id="checkall" data-name="checkbox" lay-filter="check" lay-skin="primary"></th>
-            <th width="60">序号</th>
-            <th width="120">名称</th>
+            <th width="80">序号
+                <div class="order-box">
+                    <a href="javascript:;" class="sort" data-filed="id" data-asc="true"><i class="iconfont" >&#xe615;</i></a>
+                    <a href="javascript:;" class="sort down" data-filed="id"><i class="iconfont">&#xe647;</i></a>
+                </div>
+            </th>
+            <th>名称</th>
             <th>描述</th>
-            <th width="80">排序</th>
+            <th width="70">排序</th>
             <th width="100">状态</th>
             <th width="300">操作</th>
         </tr>
@@ -83,11 +96,9 @@
 
     </table>
 </script>
-
+</body>
 <script>
     layui.use('list');
-    //    layer.confirm('是否确认删除？', {title: false, closeBtn: false, offset: ['center']}, function (index) {
-    //        location.href = url;
-    //        layer.close(index);
-    //    });
 </script>
+
+</html>

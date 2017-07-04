@@ -15,7 +15,7 @@ class LogUtils
      * 写日志
      * @param $msg string 日志内容
      * @param $_path string 存放路径
-     * @param $log_name 日志名称
+     * @param $log_name string 日志名称
      * @return
      */
     public static function log($msg, $_path = '',$log_name='')

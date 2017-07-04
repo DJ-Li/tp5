@@ -369,7 +369,7 @@ function check_id($id)
  */
 function check_number($number)
 {
-    if (preg_match('/^\d*$/', $number)) {
+    if (preg_match('/^[-\\+]?[\\d]*$/', $number)) {
         return true;
     }
     return false;
