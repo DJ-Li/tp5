@@ -59,13 +59,13 @@
         <div class="layui-form-item" pane>
             <label class="layui-form-label">状 态</label>
             <div class="layui-input-inline">
-                <input type="checkbox" name="status" lay-skin="switch" lay-filter="" lay-text="显示|隐藏"  {if condition='$list.state eq 0'} checked {/if} >
+                <input type="checkbox" name="status" lay-skin="switch" lay-filter="" lay-text="显示|隐藏"  {if condition='$list.status eq 1'} checked {/if} >
             </div>
         </div>
         <div class="layui-form-item" pane>
             <label class="layui-form-label">可否操作</label>
             <div class="layui-input-inline">
-                <input type="checkbox" name="ban" lay-skin="switch" lay-filter="" lay-text="允许|禁止" {if condition='$list.ban eq 0'} checked {/if} >
+                <input type="checkbox" name="ban" lay-skin="switch" lay-filter="" lay-text="允许|禁止" {if condition='$list.ban eq 1'} checked {/if} >
             </div>
             <div class="layui-form-mid layui-word-aux">
                 如：某些菜单禁止编辑、删除、隐藏等等...

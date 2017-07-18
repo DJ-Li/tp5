@@ -114,14 +114,14 @@ class Menu extends AdminBase
                 $data[$key] = trim($val);
             });
             if (array_key_exists('status', $data) && $data['status'] == 'on') {
-                $data['status'] = '-1';
-            } else {
                 $data['status'] = '1';
+            } else {
+                $data['status'] = '-1';
             }
             if (array_key_exists('menu_ban', $data) && $data['menu_ban'] == 'on') {
-                $data['menu_ban'] = '0';
-            } else {
                 $data['menu_ban'] = '1';
+            } else {
+                $data['menu_ban'] = '-1';
             }
             if (!check_id($data['id'])) {
                 return self::json(AjaxCode::PARAM_ERROR, '参数错误！');

@@ -96,19 +96,14 @@ layui.define(['jquery', 'layer', 'form'], function(exports) {
 
         var _area = "auto";
         if (options.area != "auto") {
-            _area = options.area.split(',');
-            var width = parseInt(_area[0]);
-            var dpr = window.devicePixelRatio;
-            var maxWidth = $(window).width() - 20 * dpr;
-            if (width > maxWidth) {
-                _area[0] = (maxWidth) + "px";
-            }
-            var height = parseInt(_area[1]);
-            var maxHeight = $(window).height() - 20 * dpr;
-            if (height > maxHeight) {
-                _area[1] = (maxHeight) + "px";
-            }
 
+            var width = parseInt(options.area),
+                _area = width + "px";
+            dpr = window.devicePixelRatio,
+                maxWidth = $(window).width() - 20 * dpr;
+            if (width > maxWidth) {
+                _area = (maxWidth) + "px";
+            }
         }
 
         if (options.full) {
@@ -151,18 +146,13 @@ layui.define(['jquery', 'layer', 'form'], function(exports) {
 
         var _area = "auto";
         if (options.area != "auto") {
-            _area = options.area.split(',');
-            var width = parseInt(_area[0]);
 
-            var dpr = window.devicePixelRatio;
-            var maxWidth = $(window).width() - 20 * dpr;
+            var width = parseInt(options.area),
+                _area = width + "px";
+            dpr = window.devicePixelRatio,
+                maxWidth = $(window).width() - 20 * dpr;
             if (width > maxWidth) {
-                _area[0] = (maxWidth) + "px";
-            }
-            var height = parseInt(_area[1]);
-            var maxHeight = $(window).height() - 20 * dpr;
-            if (height > maxHeight) {
-                _area[1] = (maxHeight) + "px";
+                _area = (maxWidth) + "px";
             }
         }
         //判断是否有表单存在，如果有就重置表单

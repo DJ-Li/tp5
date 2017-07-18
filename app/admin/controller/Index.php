@@ -30,7 +30,6 @@ class Index extends AdminBase
     {
         return $this->fetch('index');
     }
-
     /**
      * 获取菜单
      */
@@ -43,7 +42,6 @@ class Index extends AdminBase
             return self::json(AjaxCode::FAIL, '获取失败', $data);
         }
     }
-
     /**
      * 获取首页信息
      */

@@ -1,7 +1,7 @@
 /*
  * @Author: Paco
  * @Date:   2017-02-10
- * @lastModify 2017-04-13
+ * @lastModify 2017-05-05
  * +----------------------------------------------------------------------
  * | jqadmin [ jq酷打造的一款懒人后台模板 ]
  * | Copyright (c) 2017 http://jqadmin.jqcool.net All rights reserved.
@@ -239,21 +239,19 @@ layui.define(['jquery', 'laytpl', 'layer', 'modal', 'ajax', 'laypage', 'form'], 
         var _this = event.data._this,
             oldTxt = $.trim($(this).text()),
             td = $(this),
-            input = $("<input type='text' value='" + oldTxt + "'/>");
+            list = JSON.parse(td.attr("data-list")),
+            input = $("<input type='text' name='" + list.filed + "' value='" + oldTxt + "'/>");
         input.css({ "width": "100%", "height": "40px", "padding": "5px" })
         td.html(input);
         input.click(function() { return false; });
-        //获取焦点 
-        //input.trigger("focus");
         input.select();
         //文本框失去焦点后提交内容，重新变为文本 
         input.blur(function() {
             var newtxt = $(this).val();
             //判断文本有没有修改 
             if (newtxt != oldTxt) {
-
                 //异步修改数据
-                td.on('change', { ajax: ajax, content: newtxt }, ajax.click)
+                td.on('change', { ajax: ajax, content: newtxt, field: list.filed }, ajax.click)
                 td.trigger('change');
                 td.html(newtxt);
             } else {

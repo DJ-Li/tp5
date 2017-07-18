@@ -1,7 +1,7 @@
 /*
  * @Author: Paco
  * @Date:   2017-03-12
- * @lastModify 2017-03-19
+ * @lastModify 2017-05-08
  * +----------------------------------------------------------------------
  * | jqadmin [ jq酷打造的一款懒人后台模板 ]
  * | Copyright (c) 2017 http://jqadmin.jqcool.net All rights reserved.
@@ -184,34 +184,11 @@ layui.define(['jquery', 'laytpl', 'tabmenu', 'layer', 'elem'], function(exports)
             }
         });
 
-        // //绑定tag菜单向左滚动按钮事件
-        // $('span.move-left-btn').bind("click", function() {
-        //     var item = tabmenu.config.item,
-        //         ml = parseInt($('' + item + '').children('ul.layui-tab-title').css("margin-left"));
-        //     if (ml < 0) {
-        //         ml = ml + 130;
-        //         if (ml > 0) {
-        //             ml = 0;
-        //         }
-        //         $('' + item + '').children('ul.layui-tab-title').css("margin-left", ml);
-        //     }
+        //绑定tab切换事件
+        // element.on('tab(tabmenu)', function(data) {
+        //     alert(123);
         // });
 
-        // //绑定tag菜单向右滚动按钮事件
-        // $('span.move-right-btn').bind("click", function() {
-
-        //     var obj = $('' + tabmenu.config.item + '').children('ul.layui-tab-title'),
-        //         ml = parseInt(obj.css("margin-left")),
-        //         tab_all_width = parseInt(obj.prop('scrollWidth')),
-        //         navWidth = parseInt(obj.parent('div').width());
-        //     if (ml - navWidth > -tab_all_width) {
-        //         ml = ml - 130;
-        //         if (ml <= parseInt(navWidth - tab_all_width - 54)) {
-        //             ml = navWidth - tab_all_width - 54;
-        //         }
-        //         obj.css("margin-left", ml);
-        //     }
-        // });
 
         //绑定更多按钮事件
         $('.tab-move-btn').bind("click", function() {
@@ -273,18 +250,25 @@ layui.define(['jquery', 'laytpl', 'tabmenu', 'layer', 'elem'], function(exports)
     jqmenu.prototype.openOldMenu = function() {
         element.on('tab(tabmenu)', function() {
             var layId = $(this).attr("lay-id");
+
             $('.menu-list').slideUp();
             $('.tab-move-btn').find('i').html("&#xe604;");
             var data = {
                 layId: layId,
-                parent: parent
+                parent: false
             }
             if (!init) {
                 tabmenu.storage(data, "change");
             }
 
+            if ($(this).attr("fresh")) {
+                $(this).removeAttr("fresh");
+                tabmenu.fresh(layId);
+            }
+
         });
         var sStorage = window.sessionStorage;
+        var explorer = navigator.userAgent;
         if (sStorage.menu) {
             var menulist = sStorage.menu;
             menulist = menulist.split("|");
@@ -293,9 +277,15 @@ layui.define(['jquery', 'laytpl', 'tabmenu', 'layer', 'elem'], function(exports)
                     continue;
                 }
                 if (typeof menulist[index] === 'string') {
-                    var menu = JSON.parse(menulist[index])
+                    var menu = JSON.parse(menulist[index]);
+
                 }
+
                 menu.nodo = true;
+
+                if (explorer.indexOf("Firefox") >= 0) {
+                    menu.old = true;
+                }
                 this.menuOpen(menu);
             }
         }
@@ -304,6 +294,9 @@ layui.define(['jquery', 'laytpl', 'tabmenu', 'layer', 'elem'], function(exports)
 
             if (typeof menu === 'string') {
                 menu = JSON.parse(menu);
+            }
+            if (explorer.indexOf("Firefox") >= 0) {
+                menu.old = true;
             }
             this.menuOpen(menu);
         }

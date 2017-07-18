@@ -2,7 +2,7 @@
  @Name：layui.jqajax 异步提交插件
  @Author：Paco
  @date: 2016-12-03
- @lastModify 2017-04-4
+ @lastModify 2017-05-05
  @web: www.jqcool.net
  */
 layui.define(['jquery', 'form', 'layer'], function(exports) {
@@ -84,6 +84,17 @@ layui.define(['jquery', 'form', 'layer'], function(exports) {
         if (event.data.content) {
             $(this).off("change");
             options.content = event.data.content;
+
+            if (options.data != undefined || null != options.data) {
+                if (options.data.indexOf(event.data.field) != -1) {
+                    var re = new RegExp(event.data.field + "=[^&]*", "gim");
+                    options.data = options.data.replace(re, event.data.field + "=" + event.data.content);
+                } else {
+                    options.data = options.data + "&" + event.data.field + "=" + event.data.content;
+                }
+            } else {
+                options.data = event.data.field + "=" + event.data.content;
+            }
         }
         _ajax.confirm(_ajax, options, $(this));
     }

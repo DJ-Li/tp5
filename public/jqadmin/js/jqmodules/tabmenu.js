@@ -1,7 +1,7 @@
 /*
  * @Author: Paco
  * @Date:   2017-01-31
- * @lastModify 2017-03-22
+ * @lastModify 2017-05-08
  * +----------------------------------------------------------------------
  * | jqadmin [ jq酷打造的一款懒人后台模板 ]
  * | Copyright (c) 2017 http://jqadmin.jqcool.net All rights reserved.
@@ -55,10 +55,6 @@ layui.define(['jquery', 'elem'], function(exports) {
                 console.log('错误:请设置Tab菜单选项卡属性lay-filter过滤器');
             }
         }
-
-
-
-
 
         objTab.titleBox = $container.children('ul.layui-tab-title');
         objTab.contentBox = $container.children('div.layui-tab-content');
@@ -125,6 +121,20 @@ layui.define(['jquery', 'elem'], function(exports) {
                 id: layID,
                 parent: data.parent
             });
+
+            if (data.old) {
+                objTab.titleBox.find('li[lay-id=' + layID + ']').attr("fresh", 1);
+            }
+
+
+            //页面淡出效果
+            _this.effect(layID);
+            // var l = layer.load(1);
+            // objTab.contentBox.find('iframe[data-id=' + layID + ']').css("opacity", "0").load(function() {
+            //     $(this).delay(100).animate({ opacity: '1' }, "slow");
+            //     layer.close(l);
+            // });
+
             //添加打开的菜单到列表
             data.layId = layID;
             if (!data.nodo) {
@@ -167,6 +177,7 @@ layui.define(['jquery', 'elem'], function(exports) {
 
         } else {
             element.tabChange(objTab.tabFilter, tab_index, data.parent);
+            _this.effect(tab_index, true);
             data.layId = tab_index;
             _this.storage(data, "change");
 
@@ -176,6 +187,21 @@ layui.define(['jquery', 'elem'], function(exports) {
             }
         }
 
+
+    }
+
+    tabMenu.prototype.effect = function(layID, ischange) {
+        //页面淡出效果
+        var l = layer.load(1);
+        if (ischange) {
+            objTab.contentBox.find('iframe[data-id=' + layID + ']').css({ "opacity": "0", "margin-top": "50px" }).delay(200).animate({ opacity: '1', marginTop: "0" }, 500);
+            layer.close(l);
+        } else {
+            objTab.contentBox.find('iframe[data-id=' + layID + ']').css({ "opacity": "0", "margin-top": "50px" }).load(function() {
+                $(this).delay(100).animate({ opacity: '1', marginTop: "0" }, 500);
+                layer.close(l);
+            });
+        }
 
     }
 
